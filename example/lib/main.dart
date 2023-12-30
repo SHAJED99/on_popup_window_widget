@@ -42,65 +42,28 @@ class MainWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          OnProcessButtonWidget(
-            onTap: () async {
-              await showDialog(
-                context: context,
-                builder: (context) {
-                  return OnPopupWindowWidget(
-                    // title: const Text("I am a title."),
-                    // footer: Text(s),
-                    footer: Container(
-                      color: Colors.amber,
-                      child: Column(
-                        children: [
-                          Text(s),
-                          Text(s),
-                          Text(s),
-                          Text(s),
-                          Text(s),
-                          Text(s),
-                        ],
-                      ),
-                    ),
-                    child: Container(
-                      color: Colors.blue,
-                      child: Column(
-                        children: [
-                          Text(s),
-                          Text(s),
-                          Text(s),
-                          Text(s),
-                          Text(s),
-                          Text(s),
-                        ],
-                      ),
-                    ),
-                    // child: Text(s),
-                  );
-                },
-              );
-              return;
-            },
-          ),
-          // Spacer(),
-          // BottomAppBar(),
-          // OnPopupWindowWidget(
-          //   title: const Text("I am a title."),
-          //   footer: Text(s),
-          //   child: Text(s),
-          // ),
-          // TimePickerDialog(initialTime: TimeOfDay.now()),
-
-          // DatePickerDialog(
-          //   firstDate: DateTime.now().subtract(Duration(days: 30)),
-          //   lastDate: DateTime.now().add(Duration(days: 30)),
-          // ),
-        ],
+    return OnPopupWindowWidget(
+      // contentPadding: 24,
+      title: Container(
+        color: Colors.green,
+        child: const Text("I am a title."),
+      ),
+      footer: Container(
+        color: Colors.blue,
+        child: const Text("I am a title."),
+      ),
+      child: Container(
+        color: Colors.blue,
+        child: Column(
+          children: [
+            // Text(s),
+            // Text(s),
+            // Text(s),
+            // Text(s),
+            // Text(s),
+            Text(s),
+          ],
+        ),
       ),
     );
   }

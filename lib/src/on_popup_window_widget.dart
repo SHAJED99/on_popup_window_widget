@@ -11,25 +11,25 @@ class OnPopupWindowWidget extends StatelessWidget {
     this.defaultTextAlign = TextAlign.center,
     this.duration = const Duration(milliseconds: 200),
     this.footer,
-    this.indentIndex = 0,
     this.mainWindowPadding,
     this.maxBoxSize,
     this.title,
     this.width,
+    this.supportedOrientation,
   }) : super(key: key);
 
   final BorderRadiusGeometry? borderRadius;
   final Widget? child;
   final CrossAxisAlignment crossAxisAlignment;
-  final EdgeInsetsGeometry? contentPadding;
+  final double? contentPadding;
   final TextStyle? defaultTextStyle;
   final TextAlign defaultTextAlign;
   final Duration duration;
   final Widget? footer;
 
-  final int indentIndex;
   final EdgeInsetsGeometry? mainWindowPadding;
   final double? maxBoxSize;
+  final Orientation? supportedOrientation;
   final Widget? title;
   final double? width;
 
@@ -38,14 +38,17 @@ class OnPopupWindowWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    double p = theme.buttonTheme.height;
-    Size size = MediaQuery.of(context).size;
-    bool landscape = MediaQuery.orientationOf(context) == Orientation.landscape;
-    double maxWidth = landscape ? p * 12 : maxBoxSize ?? p * 7;
-    double maxHeight = !landscape ? p * 12 : maxBoxSize ?? p * 7;
+    double p = contentPadding ?? theme.buttonTheme.height / 2;
+    double bh = theme.buttonTheme.height;
+    bool landscape = supportedOrientation != null ? MediaQuery.orientationOf(context) == supportedOrientation : MediaQuery.orientationOf(context) == Orientation.landscape;
+    double maxWidth = landscape ? bh * 12 : maxBoxSize ?? bh * 7.5;
+    double maxHeight = !landscape ? bh * 12 : maxBoxSize ?? bh * 7.5;
     bool useMaterial3 = theme.useMaterial3;
 
-    Widget animatedSize(Widget? innerChild) {
+    Widget ____size() => SizedBox(height: p / 2, width: p / 2);
+
+    Widget? animatedSize(Widget? innerChild) {
+      if (title == null && child == null && footer == null) return null;
       return AnimatedSize(
         duration: duration,
         child: innerChild,
@@ -53,29 +56,31 @@ class OnPopupWindowWidget extends StatelessWidget {
     }
 
     Widget titleChild() {
-      return animatedSize(
-        title == null
-            ? null
-            : Column(
-                crossAxisAlignment: crossAxisAlignment,
-                children: [
-                  DefaultTextStyle(
-                    textAlign: TextAlign.start,
-                    style: theme.textTheme.titleMedium?.copyWith(color: theme.colorScheme.onBackground, fontWeight: FontWeight.bold) ?? const TextStyle(),
-                    child: Padding(padding: contentPadding ?? EdgeInsets.symmetric(horizontal: p / 2), child: title!),
-                  ),
-                  Padding(padding: EdgeInsets.symmetric(vertical: contentPadding?.vertical ?? p / 4), child: const Divider(height: 0)),
-                ],
-              ),
+      if (title == null) return const SizedBox();
+
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: crossAxisAlignment,
+        children: [
+          ____size(),
+          DefaultTextStyle(
+            textAlign: TextAlign.start,
+            style: theme.textTheme.titleMedium?.copyWith(color: theme.colorScheme.onBackground, fontWeight: FontWeight.bold) ?? const TextStyle(),
+            child: Padding(padding: EdgeInsets.symmetric(horizontal: p), child: title!),
+          ),
+          ____size(),
+          const Divider(height: 0),
+        ],
       );
     }
 
     Widget childChild() {
-      return Container(
-        constraints: landscape ? null : BoxConstraints(maxHeight: (size.height / 2) - (p * 2)),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: p / 2),
+      if (child == null) return const SizedBox();
+
+      return Flexible(
+        child: Padding(
+          padding: EdgeInsets.only(top: p / 2),
+          child: SingleChildScrollView(
             child: child,
           ),
         ),
@@ -83,45 +88,11 @@ class OnPopupWindowWidget extends StatelessWidget {
     }
 
     Widget footerChild() {
-      return Column(
-        crossAxisAlignment: crossAxisAlignment,
-        children: [
-          SizedBox(height: p / 4),
-          Container(
-            constraints: BoxConstraints(maxHeight: (size.height / 4) - (p / 2)),
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: p / 2),
-                child: footer,
-              ),
-            ),
-          ),
-        ],
-      );
-    }
-
-    Widget childOrientation() {
-      if (landscape)
-        return Column(
-          children: [
-            titleChild(),
-            Row(
-              children: [
-                Flexible(child: childChild()),
-                // Flexible(child: footerChild()),
-              ],
-            ),
-          ],
-        );
-
-      return SingleChildScrollView(
-        child: Column(
-          children: [
-            titleChild(),
-            childChild(),
-            footerChild(),
-          ],
-        ),
+      if (footer == null) return const SizedBox();
+      return Container(
+        padding: EdgeInsets.only(top: p / 2),
+        alignment: Alignment.centerRight,
+        child: footer,
       );
     }
 
@@ -131,25 +102,44 @@ class OnPopupWindowWidget extends StatelessWidget {
       removeRight: true,
       removeBottom: true,
       context: context,
-      child: Center(
-        child: animatedSize(
-          Container(
-            constraints: BoxConstraints(maxWidth: maxWidth, maxHeight: maxHeight),
-            margin: mainWindowPadding ?? EdgeInsets.all(p / 2),
-            child: Material(
-              elevation: p / 2,
-              color: theme.colorScheme.background,
-              clipBehavior: Clip.antiAlias,
-              borderRadius: borderRadius ?? BorderRadius.circular(p / 2),
-              child: Container(
-                padding: contentPadding ?? EdgeInsets.symmetric(vertical: p / 2),
-                // constraints: BoxConstraints(maxHeight: ),
-                decoration: BoxDecoration(color: useMaterial3 ? theme.colorScheme.primary.withOpacity(0.1) : theme.canvasColor),
-                // child: CustomScrollView(slivers: []),
-
-                // child: Center(child: Text(landscape.toString())),
-
-                child: childOrientation(),
+      child: Align(
+        child: Container(
+          constraints: BoxConstraints(maxWidth: maxWidth, maxHeight: maxHeight),
+          margin: mainWindowPadding ?? EdgeInsets.all(p),
+          child: Material(
+            elevation: p,
+            clipBehavior: Clip.antiAlias,
+            surfaceTintColor: Colors.transparent,
+            color: theme.colorScheme.background,
+            borderRadius: borderRadius ?? BorderRadius.circular(p),
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: p / 2),
+              decoration: BoxDecoration(color: useMaterial3 ? theme.colorScheme.primary.withOpacity(0.1) : theme.canvasColor),
+              child: animatedSize(
+                DefaultTextStyle(
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Theme.of(context).colorScheme.onBackground) ?? const TextStyle(),
+                  child: Column(
+                    crossAxisAlignment: crossAxisAlignment,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      titleChild(),
+                      Flexible(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: p),
+                          child: Column(
+                            crossAxisAlignment: crossAxisAlignment,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              childChild(),
+                              footerChild(),
+                            ],
+                          ),
+                        ),
+                      ),
+                      ____size(),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
@@ -158,45 +148,3 @@ class OnPopupWindowWidget extends StatelessWidget {
     );
   }
 }
-
-// class _DividedBar extends StatelessWidget {
-//   final EdgeInsetsGeometry? margin;
-//   final Axis direction;
-//   final double? size;
-//   final Color? color;
-//   const _DividedBar({
-//     this.margin,
-//     this.direction = Axis.horizontal,
-//     this.size,
-//     this.color,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     double p = Theme.of(context).buttonTheme.height;
-
-//     return Container(
-//       margin: margin,
-//       width: direction == Axis.vertical ? p / 16 : size,
-//       height: direction == Axis.horizontal ? p / 16 : size,
-//       decoration: BoxDecoration(
-//         color: color ?? Theme.of(context).colorScheme.onPrimaryContainer.withOpacity(1),
-//         borderRadius: BorderRadius.circular(p / 2),
-//       ),
-//     );
-//   }
-// }
-
-// DefaultTextStyle(
-//                   textAlign: defaultTextAlign,
-//                   style: defaultTextStyle ?? theme.textTheme.titleSmall?.copyWith(color: theme.colorScheme.onBackground) ?? const TextStyle(),
-//                   child: Column(
-//                     mainAxisSize: MainAxisSize.min,
-//                     crossAxisAlignment: crossAxisAlignment,
-//                     children: [
-//                       titleChild(),
-//                       childChild(),
-//                       footerChild(),
-//                     ],
-//                   ),
-//                 ),
