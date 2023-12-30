@@ -18,12 +18,13 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.amber, brightness: Brightness.light),
       ),
       darkTheme: ThemeData(
+        buttonTheme: const ButtonThemeData(height: 24 * 2),
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.amber, brightness: Brightness.dark),
       ),
-      themeMode: ThemeMode.light,
-      // themeMode: ThemeMode.dark,
-      home: Scaffold(
+      // themeMode: ThemeMode.light,
+      themeMode: ThemeMode.dark,
+      home: const Scaffold(
         body: Padding(
           padding: EdgeInsets.symmetric(vertical: 24),
           child: Center(
@@ -42,28 +43,92 @@ class MainWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return OnPopupWindowWidget(
-      // contentPadding: 24,
-      title: Container(
-        color: Colors.green,
-        child: const Text("I am a title."),
-      ),
-      footer: Container(
-        color: Colors.blue,
-        child: const Text("I am a title."),
-      ),
-      child: Container(
-        color: Colors.blue,
-        child: Column(
-          children: [
-            // Text(s),
-            // Text(s),
-            // Text(s),
-            // Text(s),
-            // Text(s),
-            Text(s),
-          ],
-        ),
+    // return OnPopupWindowWidget(
+    //   contentPadding: 24,
+    //   title: Container(
+    //     color: Colors.green,
+    //     child: const Text("I am a title."),
+    //   ),
+    //   footer: Container(
+    //     color: Colors.blue,
+    //     child: const Text("I am a title."),
+    //   ),
+    //   child: Container(
+    //     color: Colors.blue,
+    //     child: Column(
+    //       children: [
+    //         // Text(s),
+    //         // Text(s),
+    //         Text(s),
+    //         Text(s),
+    //         Text(s),
+    //         Text(s),
+    //       ],
+    //     ),
+    //   ),
+    // );
+
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TimePickerDialog(initialTime: TimeOfDay.now()),
+          OnPopupWindowWidget(
+            contentPadding: 24,
+            title: Container(
+              // color: Colors.green,
+              child: const Text("I am a title."),
+            ),
+            footer: Container(
+              // color: Colors.blue,
+              child: const Text("I am a title."),
+            ),
+            child: Container(
+              // color: Colors.blue,
+              child: Column(
+                children: [
+                  Text(s),
+                  Text(s),
+                  Text(s),
+                  Text(s),
+                  Text(s),
+                  Text(s),
+                ],
+              ),
+            ),
+          ),
+          OnProcessButtonWidget(
+            expanded: false,
+            child: const Text("d"),
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (_) => OnPopupWindowWidget(
+                  contentPadding: 24,
+                  title: Container(
+                    child: const Text("I am a title."),
+                  ),
+                  footer: Container(
+                    child: const Text("I am a title."),
+                  ),
+                  child: Container(
+                    child: Column(
+                      children: [
+                        Text(s),
+                        Text(s),
+                        Text(s),
+                        Text(s),
+                        Text(s),
+                        Text(s),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+              return;
+            },
+          ),
+        ],
       ),
     );
   }

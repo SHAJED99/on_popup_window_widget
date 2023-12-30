@@ -33,16 +33,14 @@ class OnPopupWindowWidget extends StatelessWidget {
   final Widget? title;
   final double? width;
 
-  final ScrollController scrollController = ScrollController();
-
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     double p = contentPadding ?? theme.buttonTheme.height / 2;
     double bh = theme.buttonTheme.height;
     bool landscape = supportedOrientation != null ? MediaQuery.orientationOf(context) == supportedOrientation : MediaQuery.orientationOf(context) == Orientation.landscape;
-    double maxWidth = landscape ? bh * 12 : maxBoxSize ?? bh * 7.5;
-    double maxHeight = !landscape ? bh * 12 : maxBoxSize ?? bh * 7.5;
+    double maxWidth = landscape ? bh * 16 : maxBoxSize ?? bh * 10;
+    double maxHeight = !landscape ? bh * 16 : maxBoxSize ?? bh * 10;
     bool useMaterial3 = theme.useMaterial3;
 
     Widget ____size() => SizedBox(height: p / 2, width: p / 2);
@@ -50,6 +48,7 @@ class OnPopupWindowWidget extends StatelessWidget {
     Widget? animatedSize(Widget? innerChild) {
       if (title == null && child == null && footer == null) return null;
       return AnimatedSize(
+        curve: Curves.easeInOut,
         duration: duration,
         child: innerChild,
       );
@@ -81,7 +80,10 @@ class OnPopupWindowWidget extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.only(top: p / 2),
           child: SingleChildScrollView(
-            child: child,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: p),
+              child: child,
+            ),
           ),
         ),
       );
@@ -90,7 +92,7 @@ class OnPopupWindowWidget extends StatelessWidget {
     Widget footerChild() {
       if (footer == null) return const SizedBox();
       return Container(
-        padding: EdgeInsets.only(top: p / 2),
+        padding: EdgeInsets.only(top: p / 2, left: p, right: p),
         alignment: Alignment.centerRight,
         child: footer,
       );
@@ -117,23 +119,21 @@ class OnPopupWindowWidget extends StatelessWidget {
               decoration: BoxDecoration(color: useMaterial3 ? theme.colorScheme.primary.withOpacity(0.1) : theme.canvasColor),
               child: animatedSize(
                 DefaultTextStyle(
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Theme.of(context).colorScheme.onBackground) ?? const TextStyle(),
+                  textAlign: defaultTextAlign,
+                  style: defaultTextStyle ?? Theme.of(context).textTheme.titleSmall?.copyWith(color: Theme.of(context).colorScheme.onBackground) ?? const TextStyle(),
                   child: Column(
                     crossAxisAlignment: crossAxisAlignment,
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       titleChild(),
                       Flexible(
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: p),
-                          child: Column(
-                            crossAxisAlignment: crossAxisAlignment,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              childChild(),
-                              footerChild(),
-                            ],
-                          ),
+                        child: Column(
+                          crossAxisAlignment: crossAxisAlignment,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            childChild(),
+                            footerChild(),
+                          ],
                         ),
                       ),
                       ____size(),
