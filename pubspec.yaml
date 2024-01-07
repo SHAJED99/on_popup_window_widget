@@ -4,16 +4,15 @@ version: 0.0.1
 homepage: https://github.com/SHAJED99/on_process_button_widget
 license: BSD 3-Clause
 
-# // -------------------
-# screenshots:
-#   - description: 'Example of on_process_button_widget'
-#     path: screenshots/all.gif
+// -------------------
+screenshots:
+  - description: 'Example of on_process_button_widget'
+    path: screenshots/1.gif
 
-# // -------------------
-# topics:
-#   - button 
-#   - elevated-button
-#   - animated-button
+// -------------------
+topics:
+  - popup-window
+  - dialog
 
 environment:
   sdk: '>=2.12.0 <4.0.0'

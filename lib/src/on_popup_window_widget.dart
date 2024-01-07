@@ -1,74 +1,162 @@
 import 'package:flutter/material.dart';
 
 class OnPopupWindowWidget extends StatelessWidget {
-  OnPopupWindowWidget({
+  const OnPopupWindowWidget({
     Key? key,
+    this.mainWindowAlignment = Alignment.center,
     this.borderRadius,
     this.child,
     this.contentPadding,
-    this.crossAxisAlignment = CrossAxisAlignment.start,
+    this.centerTitle,
     this.defaultTextStyle,
     this.defaultTextAlign = TextAlign.center,
-    this.duration = const Duration(milliseconds: 200),
+    this.duration = const Duration(milliseconds: 500),
     this.footer,
     this.mainWindowPadding,
-    this.maxBoxSize,
+    this.mainWindowMaxPadding,
+    this.smallerMaxSize,
+    this.biggerMaxSize,
     this.title,
-    this.width,
+    this.divider,
     this.supportedOrientation,
-  }) : super(key: key);
+    this.titleTextStyle,
+    this.windowElevation,
+    this.overlapChildren = const [],
+  })  : _fullScreenMode = true,
+        super(key: key);
 
-  final BorderRadiusGeometry? borderRadius;
-  final Widget? child;
-  final CrossAxisAlignment crossAxisAlignment;
+  const OnPopupWindowWidget.widgetMode({
+    Key? key,
+    this.mainWindowAlignment = Alignment.center,
+    this.borderRadius,
+    this.child,
+    this.contentPadding,
+    this.centerTitle,
+    this.defaultTextStyle,
+    this.defaultTextAlign = TextAlign.center,
+    this.duration = const Duration(milliseconds: 500),
+    this.footer,
+    this.mainWindowPadding,
+    this.mainWindowMaxPadding,
+    this.smallerMaxSize,
+    this.biggerMaxSize,
+    this.title,
+    this.divider,
+    this.supportedOrientation,
+    this.titleTextStyle,
+    this.windowElevation,
+    this.overlapChildren = const [],
+  })  : _fullScreenMode = false,
+        super(key: key);
+
+  /// Popup window alignment on the screen
+  final AlignmentGeometry mainWindowAlignment;
+
+  /// Popup window padding from screen
+  final EdgeInsetsGeometry? mainWindowPadding;
+
+  /// Max popup window padding from screen
+  /// Default: (contentPadding ?? theme.buttonTheme.height / 2) * 4
+  final double? mainWindowMaxPadding;
+
+  /// Default: theme.buttonTheme.height/2
   final double? contentPadding;
-  final TextStyle? defaultTextStyle;
-  final TextAlign defaultTextAlign;
-  final Duration duration;
+
+  /// Default: BorderRadius.circular(theme.buttonTheme.height/2)
+  final BorderRadiusGeometry? borderRadius;
+
+  /// Popup window title
+  final Widget? title;
+
+  /// Default: Divider(height: 0)
+  final Widget? divider;
+
+  /// Popup window child
+  final Widget? child;
+
+  /// Popup window footer
   final Widget? footer;
 
-  final EdgeInsetsGeometry? mainWindowPadding;
-  final double? maxBoxSize;
+  /// Default: theme.appBarTheme.centerTitle ?? false
+  final bool? centerTitle;
+
+  /// Default: theme.dialogTheme.titleTextStyle ?? theme.textTheme.titleMedium?.copyWith(color: theme.colorScheme.onBackground, fontWeight: FontWeight.bold) ?? const TextStyle()
+  final TextStyle? titleTextStyle;
+
+  /// Child and footer text align
+  final TextAlign defaultTextAlign;
+
+  /// Child and footer text style
+  /// Default: theme.dialogTheme.contentTextStyle ?? theme.textTheme.titleSmall?.copyWith(color: theme.colorScheme.onBackground) ?? const TextStyle(),
+  final TextStyle? defaultTextStyle;
+
+  /// Container size changing animation duration
+  final Duration duration;
+
+  /// Window smaller max size
+  /// Default: theme.buttonTheme.height * 10
+  final double? smallerMaxSize;
+
+  /// Window bigger max size
+  /// Default: theme.buttonTheme.height * 16
+  final double? biggerMaxSize;
+
+  /// Supported device orientation
+  /// Default: null for supporting both landscape and portrait
   final Orientation? supportedOrientation;
-  final Widget? title;
-  final double? width;
+
+  /// Window elevation
+  /// Default: theme.dialogTheme.elevation ?? theme.buttonTheme.height / 2
+  final double? windowElevation;
+
+  /// Overlap children, Positional widget also can use here
+  final List<Widget> overlapChildren;
+
+  final bool _fullScreenMode;
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData m = MediaQuery.of(context);
     ThemeData theme = Theme.of(context);
-    double p = contentPadding ?? theme.buttonTheme.height / 2;
     double bh = theme.buttonTheme.height;
-    bool landscape = supportedOrientation != null ? MediaQuery.orientationOf(context) == supportedOrientation : MediaQuery.orientationOf(context) == Orientation.landscape;
-    double maxWidth = landscape ? bh * 16 : maxBoxSize ?? bh * 10;
-    double maxHeight = !landscape ? bh * 16 : maxBoxSize ?? bh * 10;
+    bool landscape = supportedOrientation != null ? Orientation.landscape == supportedOrientation : MediaQuery.orientationOf(context) == Orientation.landscape;
+    bool showPadding = ((landscape ? m.size.width : m.size.height) - m.viewInsets.bottom) < (biggerMaxSize ?? bh * 16);
+    double maxWidth = landscape ? biggerMaxSize ?? (bh * 16) : smallerMaxSize ?? (bh * 10);
+    double maxHeight = !landscape ? biggerMaxSize ?? (bh * 16) : smallerMaxSize ?? (bh * 10);
+    double p = (contentPadding ?? theme.buttonTheme.height / 2);
+
     bool useMaterial3 = theme.useMaterial3;
 
-    Widget ____size() => SizedBox(height: p / 2, width: p / 2);
+    Widget size([i]) => SizedBox(height: p / (i ?? 2), width: p / (i ?? 2));
 
-    Widget? animatedSize(Widget? innerChild) {
-      if (title == null && child == null && footer == null) return null;
-      return AnimatedSize(
+    Widget animatedSize2(Widget? innerChild) {
+      if (title == null && child == null && footer == null) return const SizedBox();
+      return AnimatedContainer(
+        // width: maxWidth,
         curve: Curves.easeInOut,
         duration: duration,
-        child: innerChild,
+        constraints: BoxConstraints(maxWidth: maxWidth),
+        child: innerChild ?? const SizedBox(),
       );
     }
 
     Widget titleChild() {
       if (title == null) return const SizedBox();
 
+      bool c = (centerTitle ?? (theme.appBarTheme.centerTitle ?? false));
+
       return Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: crossAxisAlignment,
+        crossAxisAlignment: c ? CrossAxisAlignment.center : CrossAxisAlignment.start,
         children: [
-          ____size(),
           DefaultTextStyle(
-            textAlign: TextAlign.start,
-            style: theme.textTheme.titleMedium?.copyWith(color: theme.colorScheme.onBackground, fontWeight: FontWeight.bold) ?? const TextStyle(),
+            textAlign: c ? TextAlign.center : TextAlign.start,
+            style: titleTextStyle ?? theme.dialogTheme.titleTextStyle ?? theme.textTheme.titleMedium?.copyWith(color: theme.colorScheme.onBackground, fontWeight: FontWeight.bold) ?? const TextStyle(),
             child: Padding(padding: EdgeInsets.symmetric(horizontal: p), child: title!),
           ),
-          ____size(),
-          const Divider(height: 0),
+          size(),
+          divider ?? const Divider(height: 0),
+          size(4),
         ],
       );
     }
@@ -77,10 +165,14 @@ class OnPopupWindowWidget extends StatelessWidget {
       if (child == null) return const SizedBox();
 
       return Flexible(
-        child: Padding(
-          padding: EdgeInsets.only(top: p / 2),
-          child: SingleChildScrollView(
-            child: Padding(
+        child: SingleChildScrollView(
+          child: AnimatedSize(
+            alignment: Alignment.topCenter,
+            curve: Curves.easeInOut,
+            duration: duration,
+            child: Container(
+              constraints: BoxConstraints(maxWidth: maxWidth),
+              margin: EdgeInsets.only(top: p / 4, bottom: p / 4),
               padding: EdgeInsets.symmetric(horizontal: p),
               child: child,
             ),
@@ -92,11 +184,64 @@ class OnPopupWindowWidget extends StatelessWidget {
     Widget footerChild() {
       if (footer == null) return const SizedBox();
       return Container(
-        padding: EdgeInsets.only(top: p / 2, left: p, right: p),
+        padding: EdgeInsets.only(left: p, right: p, top: p / 4),
         alignment: Alignment.centerRight,
         child: footer,
       );
     }
+
+    Widget mainWidget() {
+      return AnimatedContainer(
+        curve: Curves.easeInOut,
+        duration: duration,
+        constraints: BoxConstraints(maxHeight: maxHeight),
+        margin: mainWindowPadding ??
+            EdgeInsets.only(
+              left: (landscape ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4)) : p) + m.viewInsets.left,
+              right: (landscape ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4)) : p) + m.viewInsets.right,
+              top: (!landscape ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4)) : p) + m.viewInsets.top,
+              bottom: (!landscape ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4)) : p) + m.viewInsets.bottom,
+            ),
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Material(
+              elevation: windowElevation ?? theme.dialogTheme.elevation ?? theme.buttonTheme.height / 2,
+              clipBehavior: Clip.antiAlias,
+              surfaceTintColor: Colors.transparent,
+              color: theme.colorScheme.background,
+              borderRadius: borderRadius ?? BorderRadius.circular(theme.buttonTheme.height / 2),
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: p),
+                decoration: BoxDecoration(color: useMaterial3 ? theme.colorScheme.primary.withOpacity(0.1) : theme.canvasColor),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    animatedSize2(titleChild()),
+                    Flexible(
+                      child: DefaultTextStyle(
+                        textAlign: defaultTextAlign,
+                        style: defaultTextStyle ?? theme.dialogTheme.contentTextStyle ?? theme.textTheme.titleSmall?.copyWith(color: theme.colorScheme.onBackground) ?? const TextStyle(),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            childChild(),
+                            animatedSize2(footerChild()),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            for (Widget w in overlapChildren) w
+          ],
+        ),
+      );
+    }
+
+    if (!_fullScreenMode) return mainWidget();
 
     return MediaQuery.removeViewInsets(
       removeLeft: true,
@@ -105,45 +250,8 @@ class OnPopupWindowWidget extends StatelessWidget {
       removeBottom: true,
       context: context,
       child: Align(
-        child: Container(
-          constraints: BoxConstraints(maxWidth: maxWidth, maxHeight: maxHeight),
-          margin: mainWindowPadding ?? EdgeInsets.all(p),
-          child: Material(
-            elevation: p,
-            clipBehavior: Clip.antiAlias,
-            surfaceTintColor: Colors.transparent,
-            color: theme.colorScheme.background,
-            borderRadius: borderRadius ?? BorderRadius.circular(p),
-            child: Container(
-              padding: EdgeInsets.symmetric(vertical: p / 2),
-              decoration: BoxDecoration(color: useMaterial3 ? theme.colorScheme.primary.withOpacity(0.1) : theme.canvasColor),
-              child: animatedSize(
-                DefaultTextStyle(
-                  textAlign: defaultTextAlign,
-                  style: defaultTextStyle ?? Theme.of(context).textTheme.titleSmall?.copyWith(color: Theme.of(context).colorScheme.onBackground) ?? const TextStyle(),
-                  child: Column(
-                    crossAxisAlignment: crossAxisAlignment,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      titleChild(),
-                      Flexible(
-                        child: Column(
-                          crossAxisAlignment: crossAxisAlignment,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            childChild(),
-                            footerChild(),
-                          ],
-                        ),
-                      ),
-                      ____size(),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
+        alignment: mainWindowAlignment,
+        child: mainWidget(),
       ),
     );
   }
