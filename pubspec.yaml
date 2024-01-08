@@ -4,12 +4,12 @@ version: 0.0.1
 homepage: https://github.com/SHAJED99/on_popup_window_widget
 license: BSD 3-Clause
 
-// -------------------
+# -------------------
 screenshots:
   - description: 'Example of on_popup_window_widget'
     path: screenshots/1.gif
 
-// -------------------
+# -------------------
 topics:
   - popup-window
   - dialog
