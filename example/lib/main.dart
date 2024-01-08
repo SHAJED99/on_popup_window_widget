@@ -13,8 +13,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(useMaterial3: true, colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue, brightness: Brightness.light)),
-      darkTheme: ThemeData(useMaterial3: true, colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue, brightness: Brightness.dark)),
+      theme: ThemeData(
+          useMaterial3: true,
+          colorScheme: ColorScheme.fromSeed(
+              seedColor: Colors.blue, brightness: Brightness.light)),
+      darkTheme: ThemeData(
+          useMaterial3: true,
+          colorScheme: ColorScheme.fromSeed(
+              seedColor: Colors.blue, brightness: Brightness.dark)),
       themeMode: ThemeMode.light,
       // themeMode: ThemeMode.dark,
       home: Scaffold(
@@ -50,16 +56,19 @@ class MainWidget extends StatelessWidget {
   ];
 
   List<Widget> children(BuildContext context) {
-    return lan
+    List<Widget> res = lan
         .map(
           (e) => OnProcessButtonWidget(
-            backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+            backgroundColor:
+                Theme.of(context).colorScheme.primary.withOpacity(0.1),
             fontColor: Theme.of(context).colorScheme.onBackground,
             margin: const EdgeInsets.symmetric(vertical: 4),
             child: Text(e),
           ),
         )
         .toList();
+
+    return res + res;
   }
 
   @override
@@ -74,7 +83,8 @@ class MainWidget extends StatelessWidget {
             context: context,
             builder: (context) => OnPopupWindowWidget(
               title: const Text("Please select your Language"),
-              footer: const OnProcessButtonWidget(expanded: false, child: Text("Okay")),
+              footer: const OnProcessButtonWidget(
+                  expanded: false, child: Text("Okay")),
               child: Column(children: children(context)),
             ),
           ),
@@ -88,7 +98,8 @@ class MainWidget extends StatelessWidget {
             context: context,
             builder: (context) => OnPopupWindowWidget(
               title: const Text("Please select your Language"),
-              footer: const OnProcessButtonWidget(expanded: false, child: Text("Okay")),
+              footer: const OnProcessButtonWidget(
+                  expanded: false, child: Text("Okay")),
               overlapChildren: const [
                 Positioned(
                   right: -10,
@@ -110,7 +121,8 @@ class MainWidget extends StatelessWidget {
           child: Center(
             child: OnPopupWindowWidget.widgetMode(
               title: const Text("Please select your Language"),
-              footer: const OnProcessButtonWidget(expanded: false, child: Text("Okay")),
+              footer: const OnProcessButtonWidget(
+                  expanded: false, child: Text("Okay")),
               overlapChildren: const [
                 Positioned(
                   right: -10,
