@@ -12,15 +12,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(useMaterial3: true, colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue, brightness: Brightness.light)),
       darkTheme: ThemeData(useMaterial3: true, colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue, brightness: Brightness.dark)),
-      // themeMode: ThemeMode.light,
-      themeMode: ThemeMode.dark,
+      themeMode: ThemeMode.light,
+      // themeMode: ThemeMode.dark,
       home: Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 24),
-          child: Center(
-            child: MainWidget(),
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 24),
+            child: Center(
+              child: MainWidget(),
+            ),
           ),
         ),
       ),
@@ -103,21 +106,23 @@ class MainWidget extends StatelessWidget {
         ),
 
         //! Widget Mode
-        Flexible(
-          child: OnPopupWindowWidget.widgetMode(
-            title: const Text("Please select your Language"),
-            footer: const OnProcessButtonWidget(expanded: false, child: Text("Okay")),
-            overlapChildren: const [
-              Positioned(
-                right: -10,
-                top: -10,
-                child: OnProcessButtonWidget(
-                  contentPadding: EdgeInsets.zero,
-                  child: Icon(Icons.cancel, color: Colors.white),
+        Expanded(
+          child: Center(
+            child: OnPopupWindowWidget.widgetMode(
+              title: const Text("Please select your Language"),
+              footer: const OnProcessButtonWidget(expanded: false, child: Text("Okay")),
+              overlapChildren: const [
+                Positioned(
+                  right: -10,
+                  top: -10,
+                  child: OnProcessButtonWidget(
+                    contentPadding: EdgeInsets.zero,
+                    child: Icon(Icons.cancel, color: Colors.white),
+                  ),
                 ),
-              ),
-            ],
-            child: Column(children: children(context)),
+              ],
+              child: Column(children: children(context)),
+            ),
           ),
         )
       ],

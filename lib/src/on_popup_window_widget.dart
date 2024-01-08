@@ -191,52 +191,55 @@ class OnPopupWindowWidget extends StatelessWidget {
     }
 
     Widget mainWidget() {
-      return AnimatedContainer(
-        curve: Curves.easeInOut,
-        duration: duration,
-        constraints: BoxConstraints(maxHeight: maxHeight),
-        margin: mainWindowPadding ??
-            EdgeInsets.only(
-              left: (landscape ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4)) : p) + m.viewInsets.left,
-              right: (landscape ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4)) : p) + m.viewInsets.right,
-              top: (!landscape ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4)) : p) + m.viewInsets.top,
-              bottom: (!landscape ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4)) : p) + m.viewInsets.bottom,
-            ),
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            Material(
-              elevation: windowElevation ?? theme.dialogTheme.elevation ?? theme.buttonTheme.height / 2,
-              clipBehavior: Clip.antiAlias,
-              surfaceTintColor: Colors.transparent,
-              color: theme.colorScheme.background,
-              borderRadius: borderRadius ?? BorderRadius.circular(theme.buttonTheme.height / 2),
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: p),
-                decoration: BoxDecoration(color: useMaterial3 ? theme.colorScheme.primary.withOpacity(0.1) : theme.canvasColor),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    animatedSize2(titleChild()),
-                    Flexible(
-                      child: DefaultTextStyle(
-                        textAlign: defaultTextAlign,
-                        style: defaultTextStyle ?? theme.dialogTheme.contentTextStyle ?? theme.textTheme.titleSmall?.copyWith(color: theme.colorScheme.onBackground) ?? const TextStyle(),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            childChild(),
-                            animatedSize2(footerChild()),
-                          ],
+      return FittedBox(
+        fit: BoxFit.contain,
+        child: AnimatedContainer(
+          curve: Curves.easeInOut,
+          duration: duration,
+          constraints: BoxConstraints(maxHeight: maxHeight),
+          margin: mainWindowPadding ??
+              EdgeInsets.only(
+                left: (landscape ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4)) : p) + m.viewInsets.left,
+                right: (landscape ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4)) : p) + m.viewInsets.right,
+                top: (!landscape ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4)) : p) + m.viewInsets.top,
+                bottom: (!landscape ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4)) : p) + m.viewInsets.bottom,
+              ),
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Material(
+                elevation: windowElevation ?? theme.dialogTheme.elevation ?? theme.buttonTheme.height / 2,
+                clipBehavior: Clip.antiAlias,
+                surfaceTintColor: Colors.transparent,
+                color: theme.colorScheme.background,
+                borderRadius: borderRadius ?? BorderRadius.circular(theme.buttonTheme.height / 2),
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: p),
+                  decoration: BoxDecoration(color: useMaterial3 ? theme.dialogTheme.backgroundColor ?? theme.colorScheme.primary.withOpacity(0.1) : theme.canvasColor),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      animatedSize2(titleChild()),
+                      Flexible(
+                        child: DefaultTextStyle(
+                          textAlign: defaultTextAlign,
+                          style: defaultTextStyle ?? theme.dialogTheme.contentTextStyle ?? theme.textTheme.titleSmall?.copyWith(color: theme.colorScheme.onBackground) ?? const TextStyle(),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              childChild(),
+                              animatedSize2(footerChild()),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-            for (Widget w in overlapChildren) w
-          ],
+              for (Widget w in overlapChildren) w
+            ],
+          ),
         ),
       );
     }
