@@ -22,6 +22,8 @@ class OnPopupWindowWidget extends StatelessWidget {
     this.titleTextStyle,
     this.windowElevation,
     this.overlapChildren = const [],
+    this.useMaterial3,
+    this.fontColor,
   })  : _fullScreenMode = true,
         super(key: key);
 
@@ -46,6 +48,8 @@ class OnPopupWindowWidget extends StatelessWidget {
     this.titleTextStyle,
     this.windowElevation,
     this.overlapChildren = const [],
+    this.useMaterial3,
+    this.fontColor,
   })  : _fullScreenMode = false,
         super(key: key);
 
@@ -112,6 +116,12 @@ class OnPopupWindowWidget extends StatelessWidget {
   /// Overlap children, Positional widget also can use here
   final List<Widget> overlapChildren;
 
+  /// User Material 3 theme
+  final bool? useMaterial3;
+
+  /// Default font color
+  final Color? fontColor;
+
   final bool _fullScreenMode;
 
   @override
@@ -131,7 +141,7 @@ class OnPopupWindowWidget extends StatelessWidget {
         !landscape ? biggerMaxSize ?? (bh * 16) : smallerMaxSize ?? (bh * 10);
     double p = (contentPadding ?? theme.buttonTheme.height / 2);
 
-    bool useMaterial3 = theme.useMaterial3;
+    bool material3 = useMaterial3 ?? theme.useMaterial3;
 
     Widget size([i]) => SizedBox(height: p / (i ?? 2), width: p / (i ?? 2));
 
@@ -163,9 +173,9 @@ class OnPopupWindowWidget extends StatelessWidget {
             style: titleTextStyle ??
                 theme.dialogTheme.titleTextStyle ??
                 theme.textTheme.titleMedium?.copyWith(
-                    color: theme.colorScheme.onBackground,
+                    color: fontColor ?? theme.colorScheme.onBackground,
                     fontWeight: FontWeight.bold) ??
-                const TextStyle(),
+                TextStyle(color: fontColor ?? theme.colorScheme.onBackground),
             child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: p), child: title!),
           ),
@@ -246,7 +256,7 @@ class OnPopupWindowWidget extends StatelessWidget {
                 child: Container(
                   padding: EdgeInsets.symmetric(vertical: p),
                   decoration: BoxDecoration(
-                      color: useMaterial3
+                      color: material3
                           ? theme.dialogTheme.backgroundColor ??
                               theme.colorScheme.primary.withOpacity(0.1)
                           : theme.canvasColor),
@@ -260,8 +270,11 @@ class OnPopupWindowWidget extends StatelessWidget {
                           style: defaultTextStyle ??
                               theme.dialogTheme.contentTextStyle ??
                               theme.textTheme.titleSmall?.copyWith(
-                                  color: theme.colorScheme.onBackground) ??
-                              const TextStyle(),
+                                  color: fontColor ??
+                                      theme.colorScheme.onBackground) ??
+                              TextStyle(
+                                  color: fontColor ??
+                                      theme.colorScheme.onBackground),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
