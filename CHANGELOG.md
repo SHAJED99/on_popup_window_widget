@@ -10,3 +10,7 @@
 ## 0.0.3
 
 * useMaterial3, fontColor parameters are added
+
+## 0.0.4
+
+* Default text color nature is changed

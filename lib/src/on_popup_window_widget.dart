@@ -124,6 +124,11 @@ class OnPopupWindowWidget extends StatelessWidget {
 
   final bool _fullScreenMode;
 
+  Color inverseCanvasColor(Color color) {
+    return Color.fromRGBO(
+        255 - color.red, 255 - color.green, 255 - color.blue, color.opacity);
+  }
+
   @override
   Widget build(BuildContext context) {
     MediaQueryData m = MediaQuery.of(context);
@@ -142,6 +147,10 @@ class OnPopupWindowWidget extends StatelessWidget {
     double p = (contentPadding ?? theme.buttonTheme.height / 2);
 
     bool material3 = useMaterial3 ?? theme.useMaterial3;
+    Color fc = fontColor ??
+        (material3
+            ? theme.colorScheme.onBackground
+            : inverseCanvasColor(theme.canvasColor));
 
     Widget size([i]) => SizedBox(height: p / (i ?? 2), width: p / (i ?? 2));
 
@@ -172,9 +181,8 @@ class OnPopupWindowWidget extends StatelessWidget {
             textAlign: c ? TextAlign.center : TextAlign.start,
             style: titleTextStyle ??
                 theme.dialogTheme.titleTextStyle ??
-                theme.textTheme.titleMedium?.copyWith(
-                    color: fontColor ?? theme.colorScheme.onBackground,
-                    fontWeight: FontWeight.bold) ??
+                theme.textTheme.titleMedium
+                    ?.copyWith(color: fc, fontWeight: FontWeight.bold) ??
                 TextStyle(color: fontColor ?? theme.colorScheme.onBackground),
             child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: p), child: title!),
@@ -269,9 +277,7 @@ class OnPopupWindowWidget extends StatelessWidget {
                           textAlign: defaultTextAlign,
                           style: defaultTextStyle ??
                               theme.dialogTheme.contentTextStyle ??
-                              theme.textTheme.titleSmall?.copyWith(
-                                  color: fontColor ??
-                                      theme.colorScheme.onBackground) ??
+                              theme.textTheme.titleSmall?.copyWith(color: fc) ??
                               TextStyle(
                                   color: fontColor ??
                                       theme.colorScheme.onBackground),

@@ -14,11 +14,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          useMaterial3: true,
+          useMaterial3: false,
           colorScheme: ColorScheme.fromSeed(
-              seedColor: Colors.blue, brightness: Brightness.light)),
+              seedColor: Colors.blue, brightness: Brightness.dark)),
       darkTheme: ThemeData(
-          useMaterial3: true,
+          useMaterial3: false,
           colorScheme: ColorScheme.fromSeed(
               seedColor: Colors.blue, brightness: Brightness.dark)),
       themeMode: ThemeMode.light,
@@ -58,13 +58,7 @@ class MainWidget extends StatelessWidget {
   List<Widget> children(BuildContext context) {
     List<Widget> res = lan
         .map(
-          (e) => OnProcessButtonWidget(
-            backgroundColor:
-                Theme.of(context).colorScheme.primary.withOpacity(0.1),
-            fontColor: Theme.of(context).colorScheme.onBackground,
-            margin: const EdgeInsets.symmetric(vertical: 4),
-            child: Text(e),
-          ),
+          (e) => Text(e),
         )
         .toList();
 
