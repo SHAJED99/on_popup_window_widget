@@ -24,6 +24,7 @@ class OnPopupWindowWidget extends StatelessWidget {
     this.overlapChildren = const [],
     this.useMaterial3,
     this.fontColor,
+    this.childScrollController,
   })  : _fullScreenMode = true,
         super(key: key);
 
@@ -50,6 +51,7 @@ class OnPopupWindowWidget extends StatelessWidget {
     this.overlapChildren = const [],
     this.useMaterial3,
     this.fontColor,
+    this.childScrollController,
   })  : _fullScreenMode = false,
         super(key: key);
 
@@ -121,6 +123,9 @@ class OnPopupWindowWidget extends StatelessWidget {
 
   /// Default font color
   final Color? fontColor;
+
+  /// Child ScrollController
+  final ScrollController? childScrollController;
 
   final bool _fullScreenMode;
 
@@ -199,6 +204,7 @@ class OnPopupWindowWidget extends StatelessWidget {
 
       return Flexible(
         child: SingleChildScrollView(
+          controller: childScrollController,
           child: AnimatedSize(
             alignment: Alignment.topCenter,
             curve: Curves.easeInOut,

@@ -14,3 +14,7 @@
 ## 0.0.4
 
 * Default text color nature is changed
+
+## 0.0.5
+
+* childScrollController parameters is added. 
