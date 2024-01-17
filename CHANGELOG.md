@@ -18,3 +18,7 @@
 ## 0.0.5
 
 * childScrollController parameters is added. 
+
+## 0.0.6
+
+* intend parameters is added. 

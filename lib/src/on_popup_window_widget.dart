@@ -25,69 +25,56 @@ class OnPopupWindowWidget extends StatelessWidget {
     this.useMaterial3,
     this.fontColor,
     this.childScrollController,
+    this.intend = 1,
   })  : _fullScreenMode = true,
         super(key: key);
 
-  const OnPopupWindowWidget.widgetMode({
-    Key? key,
-    this.mainWindowAlignment = Alignment.center,
-    this.borderRadius,
-    this.child,
-    this.contentPadding,
-    this.centerTitle,
-    this.defaultTextStyle,
-    this.defaultTextAlign = TextAlign.center,
-    this.duration = const Duration(milliseconds: 500),
-    this.footer,
-    this.mainWindowPadding,
-    this.mainWindowMaxPadding,
-    this.smallerMaxSize,
-    this.biggerMaxSize,
-    this.title,
-    this.divider,
-    this.supportedOrientation,
-    this.titleTextStyle,
-    this.windowElevation,
-    this.overlapChildren = const [],
-    this.useMaterial3,
-    this.fontColor,
-    this.childScrollController,
-  })  : _fullScreenMode = false,
+  const OnPopupWindowWidget.widgetMode(
+      {Key? key,
+      this.mainWindowAlignment = Alignment.center,
+      this.borderRadius,
+      this.child,
+      this.contentPadding,
+      this.centerTitle,
+      this.defaultTextStyle,
+      this.defaultTextAlign = TextAlign.center,
+      this.duration = const Duration(milliseconds: 500),
+      this.footer,
+      this.mainWindowPadding,
+      this.mainWindowMaxPadding,
+      this.smallerMaxSize,
+      this.biggerMaxSize,
+      this.title,
+      this.divider,
+      this.supportedOrientation,
+      this.titleTextStyle,
+      this.windowElevation,
+      this.overlapChildren = const [],
+      this.useMaterial3,
+      this.fontColor,
+      this.childScrollController,
+      this.intend = 1})
+      : _fullScreenMode = false,
         super(key: key);
 
-  /// Popup window alignment on the screen
-  final AlignmentGeometry mainWindowAlignment;
-
-  /// Popup window padding from screen
-  final EdgeInsetsGeometry? mainWindowPadding;
-
-  /// Max popup window padding from screen
-  /// Default: (contentPadding ?? theme.buttonTheme.height / 2) * 4
-  final double? mainWindowMaxPadding;
-
-  /// Default: theme.buttonTheme.height/2
-  final double? contentPadding;
+  /// Window bigger max size
+  /// Default: theme.buttonTheme.height * 16
+  final double? biggerMaxSize;
 
   /// Default: BorderRadius.circular(theme.buttonTheme.height/2)
   final BorderRadiusGeometry? borderRadius;
 
-  /// Popup window title
-  final Widget? title;
-
-  /// Default: Divider(height: 0)
-  final Widget? divider;
+  /// Default: theme.appBarTheme.centerTitle ?? false
+  final bool? centerTitle;
 
   /// Popup window child
   final Widget? child;
 
-  /// Popup window footer
-  final Widget? footer;
+  /// Child ScrollController
+  final ScrollController? childScrollController;
 
-  /// Default: theme.appBarTheme.centerTitle ?? false
-  final bool? centerTitle;
-
-  /// Default: theme.dialogTheme.titleTextStyle ?? theme.textTheme.titleMedium?.copyWith(color: theme.colorScheme.onBackground, fontWeight: FontWeight.bold) ?? const TextStyle()
-  final TextStyle? titleTextStyle;
+  /// Default: theme.buttonTheme.height/2
+  final double? contentPadding;
 
   /// Child and footer text align
   final TextAlign defaultTextAlign;
@@ -96,36 +83,54 @@ class OnPopupWindowWidget extends StatelessWidget {
   /// Default: theme.dialogTheme.contentTextStyle ?? theme.textTheme.titleSmall?.copyWith(color: theme.colorScheme.onBackground) ?? const TextStyle(),
   final TextStyle? defaultTextStyle;
 
+  /// Default: Divider(height: 0)
+  final Widget? divider;
+
   /// Container size changing animation duration
   final Duration duration;
+
+  /// Default font color
+  final Color? fontColor;
+
+  /// Popup window footer
+  final Widget? footer;
+
+  /// Main window intend. Use this if you have nested window. For first window intend = 1, next window intend = 2
+  final int intend;
+
+  /// Popup window alignment on the screen
+  final AlignmentGeometry mainWindowAlignment;
+
+  /// Max popup window padding from screen
+  /// Default: (contentPadding ?? theme.buttonTheme.height / 2) * 4
+  final double? mainWindowMaxPadding;
+
+  /// Popup window padding from screen
+  final EdgeInsetsGeometry? mainWindowPadding;
+
+  /// Overlap children, Positional widget also can use here
+  final List<Widget> overlapChildren;
 
   /// Window smaller max size
   /// Default: theme.buttonTheme.height * 10
   final double? smallerMaxSize;
 
-  /// Window bigger max size
-  /// Default: theme.buttonTheme.height * 16
-  final double? biggerMaxSize;
-
   /// Supported device orientation
   /// Default: null for supporting both landscape and portrait
   final Orientation? supportedOrientation;
 
-  /// Window elevation
-  /// Default: theme.dialogTheme.elevation ?? theme.buttonTheme.height / 2
-  final double? windowElevation;
+  /// Popup window title
+  final Widget? title;
 
-  /// Overlap children, Positional widget also can use here
-  final List<Widget> overlapChildren;
+  /// Default: theme.dialogTheme.titleTextStyle ?? theme.textTheme.titleMedium?.copyWith(color: theme.colorScheme.onBackground, fontWeight: FontWeight.bold) ?? const TextStyle()
+  final TextStyle? titleTextStyle;
 
   /// User Material 3 theme
   final bool? useMaterial3;
 
-  /// Default font color
-  final Color? fontColor;
-
-  /// Child ScrollController
-  final ScrollController? childScrollController;
+  /// Window elevation
+  /// Default: theme.dialogTheme.elevation ?? theme.buttonTheme.height / 2
+  final double? windowElevation;
 
   final bool _fullScreenMode;
 
@@ -232,76 +237,80 @@ class OnPopupWindowWidget extends StatelessWidget {
     Widget mainWidget() {
       return FittedBox(
         fit: BoxFit.contain,
-        child: AnimatedContainer(
-          curve: Curves.easeInOut,
-          duration: duration,
-          constraints: BoxConstraints(maxHeight: maxHeight),
-          margin: mainWindowPadding ??
-              EdgeInsets.only(
-                left: (landscape
-                        ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4))
-                        : p) +
-                    m.viewInsets.left,
-                right: (landscape
-                        ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4))
-                        : p) +
-                    m.viewInsets.right,
-                top: (!landscape
-                        ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4))
-                        : p) +
-                    m.viewInsets.top,
-                bottom: (!landscape
-                        ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4))
-                        : p) +
-                    m.viewInsets.bottom,
-              ),
-          child: Stack(
-            clipBehavior: Clip.none,
-            children: [
-              Material(
-                elevation: windowElevation ??
-                    theme.dialogTheme.elevation ??
-                    theme.buttonTheme.height / 2,
-                clipBehavior: Clip.antiAlias,
-                surfaceTintColor: Colors.transparent,
-                color: theme.colorScheme.background,
-                borderRadius: borderRadius ??
-                    BorderRadius.circular(theme.buttonTheme.height / 2),
-                child: Container(
-                  padding: EdgeInsets.symmetric(vertical: p),
-                  decoration: BoxDecoration(
-                      color: material3
-                          ? theme.dialogTheme.backgroundColor ??
-                              theme.colorScheme.primary.withOpacity(0.1)
-                          : theme.canvasColor),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      animatedSize2(titleChild()),
-                      Flexible(
-                        child: DefaultTextStyle(
-                          textAlign: defaultTextAlign,
-                          style: defaultTextStyle ??
-                              theme.dialogTheme.contentTextStyle ??
-                              theme.textTheme.titleSmall?.copyWith(color: fc) ??
-                              TextStyle(
-                                  color: fontColor ??
-                                      theme.colorScheme.onBackground),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              childChild(),
-                              animatedSize2(footerChild()),
-                            ],
+        child: Container(
+          margin: EdgeInsets.all(p * intend),
+          child: AnimatedContainer(
+            curve: Curves.easeInOut,
+            duration: duration,
+            constraints: BoxConstraints(maxHeight: maxHeight),
+            margin: mainWindowPadding ??
+                EdgeInsets.only(
+                  left: (landscape
+                          ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4))
+                          : p) +
+                      m.viewInsets.left,
+                  right: (landscape
+                          ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4))
+                          : p) +
+                      m.viewInsets.right,
+                  top: (!landscape
+                          ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4))
+                          : p) +
+                      m.viewInsets.top,
+                  bottom: (!landscape
+                          ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4))
+                          : p) +
+                      m.viewInsets.bottom,
+                ),
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Material(
+                  elevation: windowElevation ??
+                      theme.dialogTheme.elevation ??
+                      theme.buttonTheme.height / 2,
+                  clipBehavior: Clip.antiAlias,
+                  surfaceTintColor: Colors.transparent,
+                  color: theme.colorScheme.background,
+                  borderRadius: borderRadius ??
+                      BorderRadius.circular(theme.buttonTheme.height / 2),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: p),
+                    decoration: BoxDecoration(
+                        color: material3
+                            ? theme.dialogTheme.backgroundColor ??
+                                theme.colorScheme.primary.withOpacity(0.1)
+                            : theme.canvasColor),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        animatedSize2(titleChild()),
+                        Flexible(
+                          child: DefaultTextStyle(
+                            textAlign: defaultTextAlign,
+                            style: defaultTextStyle ??
+                                theme.dialogTheme.contentTextStyle ??
+                                theme.textTheme.titleSmall
+                                    ?.copyWith(color: fc) ??
+                                TextStyle(
+                                    color: fontColor ??
+                                        theme.colorScheme.onBackground),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                childChild(),
+                                animatedSize2(footerChild()),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              for (Widget w in overlapChildren) w
-            ],
+                for (Widget w in overlapChildren) w
+              ],
+            ),
           ),
         ),
       );
