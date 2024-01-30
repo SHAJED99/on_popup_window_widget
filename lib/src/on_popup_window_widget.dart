@@ -9,7 +9,7 @@ class OnPopupWindowWidget extends StatelessWidget {
     this.contentPadding,
     this.centerTitle,
     this.defaultTextStyle,
-    this.defaultTextAlign = TextAlign.center,
+    this.defaultTextAlign = TextAlign.start,
     this.duration = const Duration(milliseconds: 500),
     this.footer,
     this.mainWindowPadding,
@@ -26,11 +26,37 @@ class OnPopupWindowWidget extends StatelessWidget {
     this.fontColor,
     this.childScrollController,
     this.intend = 1,
+    this.childCrossAxisAlignment = CrossAxisAlignment.start,
   })  : _fullScreenMode = true,
         super(key: key);
 
-  const OnPopupWindowWidget.widgetMode({Key? key, this.mainWindowAlignment = Alignment.center, this.borderRadius, this.child, this.contentPadding, this.centerTitle, this.defaultTextStyle, this.defaultTextAlign = TextAlign.center, this.duration = const Duration(milliseconds: 500), this.footer, this.mainWindowPadding, this.mainWindowMaxPadding, this.smallerMaxSize, this.biggerMaxSize, this.title, this.divider, this.supportedOrientation, this.titleTextStyle, this.windowElevation, this.overlapChildren = const [], this.useMaterial3, this.fontColor, this.childScrollController, this.intend = 1})
-      : _fullScreenMode = false,
+  const OnPopupWindowWidget.widgetMode({
+    Key? key,
+    this.mainWindowAlignment = Alignment.center,
+    this.borderRadius,
+    this.child,
+    this.contentPadding,
+    this.centerTitle,
+    this.defaultTextStyle,
+    this.defaultTextAlign = TextAlign.start,
+    this.duration = const Duration(milliseconds: 500),
+    this.footer,
+    this.mainWindowPadding,
+    this.mainWindowMaxPadding,
+    this.smallerMaxSize,
+    this.biggerMaxSize,
+    this.title,
+    this.divider,
+    this.supportedOrientation,
+    this.titleTextStyle,
+    this.windowElevation,
+    this.overlapChildren = const [],
+    this.useMaterial3,
+    this.fontColor,
+    this.childScrollController,
+    this.intend = 1,
+    this.childCrossAxisAlignment = CrossAxisAlignment.start,
+  })  : _fullScreenMode = false,
         super(key: key);
 
   /// Window bigger max size
@@ -108,6 +134,8 @@ class OnPopupWindowWidget extends StatelessWidget {
   /// Default: theme.dialogTheme.elevation ?? theme.buttonTheme.height / 2
   final double? windowElevation;
 
+  final CrossAxisAlignment childCrossAxisAlignment;
+
   final bool _fullScreenMode;
 
   Color inverseCanvasColor(Color color) {
@@ -135,7 +163,7 @@ class OnPopupWindowWidget extends StatelessWidget {
         return const SizedBox();
       }
       return AnimatedContainer(
-        // width: maxWidth,
+        width: maxWidth,
         curve: Curves.easeInOut,
         duration: duration,
         constraints: BoxConstraints(maxWidth: maxWidth),
@@ -195,19 +223,18 @@ class OnPopupWindowWidget extends StatelessWidget {
     }
 
     Widget mainWidget() {
-      return FittedBox(
-        fit: BoxFit.contain,
-        child: AnimatedContainer(
-          curve: Curves.easeInOut,
-          duration: duration,
-          constraints: BoxConstraints(maxHeight: maxHeight),
-          margin: mainWindowPadding ??
-              EdgeInsets.only(
-                left: (landscape ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4)) : p) + m.viewInsets.left,
-                right: (landscape ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4)) : p) + m.viewInsets.right,
-                top: (!landscape ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4)) : p) + m.viewInsets.top,
-                bottom: (!landscape ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4)) : p) + m.viewInsets.bottom,
-              ),
+      return AnimatedContainer(
+        curve: Curves.easeInOut,
+        duration: duration,
+        constraints: BoxConstraints(maxHeight: maxHeight),
+        margin: mainWindowPadding ??
+            EdgeInsets.only(
+              left: (landscape ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4)) : p) + m.viewInsets.left,
+              right: (landscape ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4)) : p) + m.viewInsets.right,
+              top: (!landscape ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4)) : p) + m.viewInsets.top,
+              bottom: (!landscape ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4)) : p) + m.viewInsets.bottom,
+            ),
+        child: SingleChildScrollView(
           child: Container(
             margin: EdgeInsets.all(p * intend),
             child: Stack(
@@ -231,6 +258,7 @@ class OnPopupWindowWidget extends StatelessWidget {
                             textAlign: defaultTextAlign,
                             style: defaultTextStyle ?? theme.dialogTheme.contentTextStyle ?? theme.textTheme.titleSmall?.copyWith(color: fc) ?? TextStyle(color: fontColor ?? theme.colorScheme.onBackground),
                             child: Column(
+                              crossAxisAlignment: childCrossAxisAlignment,
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 childChild(),
@@ -260,7 +288,6 @@ class OnPopupWindowWidget extends StatelessWidget {
       removeBottom: true,
       context: context,
       child: Align(
-        alignment: mainWindowAlignment,
         child: mainWidget(),
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:on_popup_window_widget/on_popup_window_widget.dart';
 import 'package:on_process_button_widget/on_process_button_widget.dart';
@@ -13,9 +14,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(useMaterial3: false, colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue, brightness: Brightness.dark)),
-      darkTheme: ThemeData(useMaterial3: false, colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue, brightness: Brightness.dark)),
+      theme: ThemeData(useMaterial3: false, colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue, brightness: Brightness.dark), buttonTheme: const ButtonThemeData(height: 60)),
+      darkTheme: ThemeData(useMaterial3: false, colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue, brightness: Brightness.dark), buttonTheme: const ButtonThemeData(height: 60)),
       themeMode: ThemeMode.light,
+
       // themeMode: ThemeMode.dark,
       home: Scaffold(
         body: SafeArea(
@@ -52,7 +54,12 @@ class MainWidget extends StatelessWidget {
   List<Widget> children(BuildContext context) {
     List<Widget> res = lan
         .map(
-          (e) => Text(e),
+          (e) =>
+              // OnProcessButtonWidget(
+              //   margin: const EdgeInsets.symmetric(vertical: 4),
+              //   child: Text(e),
+              // ),
+              Text("Language $e"),
         )
         .toList();
 
@@ -65,82 +72,91 @@ class MainWidget extends StatelessWidget {
       builder: (context) => OnPopupWindowWidget(
         intend: intend,
         title: const Text("Please select your Language"),
-        footer: OnProcessButtonWidget(
-          expanded: false,
-          onTap: () async {
-            await showCustomDialog(context, intend + 1);
-            return;
-          },
-          child: const Text("Okay"),
+        footer: Column(
+          children: [
+            // OnProcessButtonWidget(
+            //   expanded: false,
+            //   onTap: () async {
+            //     await showCustomDialog(context, intend + 1);
+            //     return;
+            //   },
+            //   child: const Text("Okay"),
+            // ),
+            const TextField(),
+          ],
         ),
-        overlapChildren: const [
+        overlapChildren: [
           Positioned(
             right: -10,
             top: -10,
             child: OnProcessButtonWidget(
               contentPadding: EdgeInsets.zero,
-              child: Icon(Icons.cancel, color: Colors.white),
+              onDone: (_) {
+                if (kDebugMode) print("Tap Tap");
+              },
+              child: const Icon(Icons.cancel, color: Colors.white),
             ),
           ),
         ],
-        child: Column(children: children(context)),
+        child: Column(
+          // mainAxisAlignment: MainAxisAlignment.start,
+          children: children(context),
+        ),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        //! Responsive
-        OnProcessButtonWidget(
-          expanded: false,
-          onTap: () => showDialog(
-            context: context,
-            builder: (context) => OnPopupWindowWidget(
-              title: const Text("Please select your Language"),
-              footer: const OnProcessButtonWidget(expanded: false, child: Text("Okay")),
-              child: Column(children: children(context)),
-            ),
-          ),
-          child: const Text("Press here"),
-        ),
-
-        //! Overlay Widget
-        OnProcessButtonWidget(
-          expanded: false,
-          onTap: () async {
-            await showCustomDialog(context, 1);
-            return;
-          },
-          child: const Text("Overlay Widget"),
-        ),
-
-        //! Widget Mode
-        Expanded(
-          child: Center(
-            child: OnPopupWindowWidget.widgetMode(
-              title: const Text("Please select your Language"),
-              footer: const OnProcessButtonWidget(
-                expanded: false,
-                child: Text("Okay"),
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          //! Responsive
+          OnProcessButtonWidget(
+            expanded: false,
+            onTap: () => showDialog(
+              context: context,
+              builder: (context) => OnPopupWindowWidget(
+                title: const Text("Please select your Language"),
+                footer: const OnProcessButtonWidget(expanded: false, child: Text("Okay")),
+                child: Column(children: children(context)),
               ),
-              overlapChildren: const [
-                Positioned(
-                  right: -10,
-                  top: -10,
-                  child: OnProcessButtonWidget(
-                    contentPadding: EdgeInsets.zero,
-                    child: Icon(Icons.cancel, color: Colors.white),
-                  ),
-                ),
-              ],
-              child: Column(children: children(context)),
             ),
+            child: const Text("Press here"),
           ),
-        )
-      ],
+
+          //! Overlay Widget
+          OnProcessButtonWidget(
+            expanded: false,
+            onTap: () async {
+              await showCustomDialog(context, 1);
+              return;
+            },
+            child: const Text("Overlay Widget"),
+          ),
+
+          //! Widget Mode
+          OnPopupWindowWidget.widgetMode(
+            title: const Text("Please select your Language"),
+            footer: const OnProcessButtonWidget(
+              expanded: false,
+              child: Text("Okay"),
+            ),
+            overlapChildren: const [
+              Positioned(
+                right: -10,
+                top: -10,
+                child: OnProcessButtonWidget(
+                  contentPadding: EdgeInsets.zero,
+                  child: Icon(Icons.cancel, color: Colors.white),
+                ),
+              ),
+            ],
+            child: Column(children: children(context)),
+          )
+        ],
+      ),
     );
   }
 }
