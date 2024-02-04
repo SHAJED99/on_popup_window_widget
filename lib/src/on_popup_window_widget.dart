@@ -234,46 +234,44 @@ class OnPopupWindowWidget extends StatelessWidget {
               top: (!landscape ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4)) : p) + m.viewInsets.top,
               bottom: (!landscape ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4)) : p) + m.viewInsets.bottom,
             ),
-        child: SingleChildScrollView(
-          child: Container(
-            margin: EdgeInsets.all(p * intend),
-            child: Stack(
-              clipBehavior: Clip.none,
-              children: [
-                Material(
-                  elevation: windowElevation ?? theme.dialogTheme.elevation ?? theme.buttonTheme.height / 2,
-                  clipBehavior: Clip.antiAlias,
-                  surfaceTintColor: Colors.transparent,
-                  color: theme.colorScheme.background,
-                  borderRadius: borderRadius ?? BorderRadius.circular(theme.buttonTheme.height / 2),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: p),
-                    decoration: BoxDecoration(color: material3 ? theme.dialogTheme.backgroundColor ?? theme.colorScheme.primary.withOpacity(0.1) : theme.canvasColor),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        animatedSize2(titleChild()),
-                        Flexible(
-                          child: DefaultTextStyle(
-                            textAlign: defaultTextAlign,
-                            style: defaultTextStyle ?? theme.dialogTheme.contentTextStyle ?? theme.textTheme.titleSmall?.copyWith(color: fc) ?? TextStyle(color: fontColor ?? theme.colorScheme.onBackground),
-                            child: Column(
-                              crossAxisAlignment: childCrossAxisAlignment,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                childChild(),
-                                animatedSize2(footerChild()),
-                              ],
-                            ),
+        child: Container(
+          margin: EdgeInsets.all(p * intend),
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Material(
+                elevation: windowElevation ?? theme.dialogTheme.elevation ?? theme.buttonTheme.height / 2,
+                clipBehavior: Clip.antiAlias,
+                surfaceTintColor: Colors.transparent,
+                color: theme.colorScheme.background,
+                borderRadius: borderRadius ?? BorderRadius.circular(theme.buttonTheme.height / 2),
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: p),
+                  decoration: BoxDecoration(color: material3 ? theme.dialogTheme.backgroundColor ?? theme.colorScheme.primary.withOpacity(0.1) : theme.canvasColor),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      animatedSize2(titleChild()),
+                      Flexible(
+                        child: DefaultTextStyle(
+                          textAlign: defaultTextAlign,
+                          style: defaultTextStyle ?? theme.dialogTheme.contentTextStyle ?? theme.textTheme.titleSmall?.copyWith(color: fc) ?? TextStyle(color: fontColor ?? theme.colorScheme.onBackground),
+                          child: Column(
+                            crossAxisAlignment: childCrossAxisAlignment,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              childChild(),
+                              animatedSize2(footerChild()),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-                for (Widget w in overlapChildren) w
-              ],
-            ),
+              ),
+              for (Widget w in overlapChildren) w
+            ],
           ),
         ),
       );
