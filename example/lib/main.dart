@@ -14,8 +14,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(useMaterial3: false, colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue, brightness: Brightness.dark), buttonTheme: const ButtonThemeData(height: 60)),
-      darkTheme: ThemeData(useMaterial3: false, colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue, brightness: Brightness.dark), buttonTheme: const ButtonThemeData(height: 60)),
+      theme: ThemeData(useMaterial3: false, colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue, brightness: Brightness.dark), buttonTheme: const ButtonThemeData(height: 48)),
+      darkTheme: ThemeData(useMaterial3: false, colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue, brightness: Brightness.dark), buttonTheme: const ButtonThemeData(height: 48)),
       themeMode: ThemeMode.light,
 
       // themeMode: ThemeMode.dark,
@@ -23,9 +23,7 @@ class MyApp extends StatelessWidget {
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 24),
-            child: Center(
-              child: MainWidget(),
-            ),
+            child: MainWidget(),
           ),
         ),
       ),
@@ -59,7 +57,7 @@ class MainWidget extends StatelessWidget {
               //   margin: const EdgeInsets.symmetric(vertical: 4),
               //   child: Text(e),
               // ),
-              Text("Language $e"),
+              OnProcessButtonWidget(child: Text("Language $e")),
         )
         .toList();
 
@@ -120,7 +118,10 @@ class MainWidget extends StatelessWidget {
               builder: (context) => OnPopupWindowWidget(
                 title: const Text("Please select your Language"),
                 footer: const OnProcessButtonWidget(expanded: false, child: Text("Okay")),
-                child: Column(children: children(context)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: children(context),
+                ),
               ),
             ),
             child: const Text("Press here"),
@@ -136,25 +137,38 @@ class MainWidget extends StatelessWidget {
             child: const Text("Overlay Widget"),
           ),
 
-          //! Widget Mode
-          OnPopupWindowWidget.widgetMode(
-            title: const Text("Please select your Language"),
-            footer: const OnProcessButtonWidget(
-              expanded: false,
-              child: Text("Okay"),
-            ),
-            overlapChildren: const [
-              Positioned(
-                right: -10,
-                top: -10,
-                child: OnProcessButtonWidget(
-                  contentPadding: EdgeInsets.zero,
-                  child: Icon(Icons.cancel, color: Colors.white),
-                ),
-              ),
-            ],
-            child: Column(children: children(context)),
+          const Dialog(
+            child: Padding(
+                padding: EdgeInsets.all(8),
+                child: Column(
+                  children: [
+                    OnProcessButtonWidget(
+                      child: Text("Heading"),
+                    ),
+                    Text("Heading"),
+                  ],
+                )),
           )
+
+          //! Widget Mode
+          // OnPopupWindowWidget.widgetMode(
+          //   title: const Text("Please select your Language"),
+          //   footer: const OnProcessButtonWidget(
+          //     expanded: false,
+          //     child: Text("Okay"),
+          //   ),
+          //   overlapChildren: const [
+          //     Positioned(
+          //       right: -10,
+          //       top: -10,
+          //       child: OnProcessButtonWidget(
+          //         contentPadding: EdgeInsets.zero,
+          //         child: Icon(Icons.cancel, color: Colors.white),
+          //       ),
+          //     ),
+          //   ],
+          //   child: Column(children: children(context)),
+          // )
         ],
       ),
     );

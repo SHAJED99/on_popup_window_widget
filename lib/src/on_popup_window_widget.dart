@@ -134,6 +134,7 @@ class OnPopupWindowWidget extends StatelessWidget {
   /// Default: theme.dialogTheme.elevation ?? theme.buttonTheme.height / 2
   final double? windowElevation;
 
+  /// Child CrossAxisAlignment
   final CrossAxisAlignment childCrossAxisAlignment;
 
   final bool _fullScreenMode;
@@ -151,6 +152,7 @@ class OnPopupWindowWidget extends StatelessWidget {
     bool showPadding = ((landscape ? m.size.width : m.size.height) - m.viewInsets.bottom) < (biggerMaxSize ?? bh * 16);
     double maxWidth = landscape ? biggerMaxSize ?? (bh * 16) : smallerMaxSize ?? (bh * 10);
     double maxHeight = !landscape ? biggerMaxSize ?? (bh * 16) : smallerMaxSize ?? (bh * 10);
+    // double p = (contentPadding ?? theme.buttonTheme.height / 2);
     double p = (contentPadding ?? theme.buttonTheme.height / 2);
 
     bool material3 = useMaterial3 ?? theme.useMaterial3;
@@ -182,7 +184,7 @@ class OnPopupWindowWidget extends StatelessWidget {
         children: [
           DefaultTextStyle(
             textAlign: c ? TextAlign.center : TextAlign.start,
-            style: titleTextStyle ?? theme.dialogTheme.titleTextStyle ?? theme.textTheme.titleMedium?.copyWith(color: fc, fontWeight: FontWeight.bold) ?? TextStyle(color: fontColor ?? theme.colorScheme.onBackground),
+            style: titleTextStyle ?? theme.dialogTheme.titleTextStyle ?? theme.textTheme.titleSmall?.copyWith(color: fc, fontWeight: FontWeight.bold) ?? TextStyle(color: fontColor ?? theme.colorScheme.onBackground),
             child: Padding(padding: EdgeInsets.symmetric(horizontal: p), child: title!),
           ),
           size(),
@@ -226,6 +228,7 @@ class OnPopupWindowWidget extends StatelessWidget {
       return AnimatedContainer(
         curve: Curves.easeInOut,
         duration: duration,
+        alignment: Alignment.center,
         constraints: BoxConstraints(maxHeight: maxHeight),
         margin: mainWindowPadding ??
             EdgeInsets.only(
@@ -285,9 +288,7 @@ class OnPopupWindowWidget extends StatelessWidget {
       removeRight: true,
       removeBottom: true,
       context: context,
-      child: Align(
-        child: mainWidget(),
-      ),
+      child: mainWidget(),
     );
   }
 }
