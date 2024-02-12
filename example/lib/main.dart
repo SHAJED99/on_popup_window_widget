@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(useMaterial3: false, colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue, brightness: Brightness.dark), buttonTheme: const ButtonThemeData(height: 48)),
+      theme: ThemeData(useMaterial3: false, colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue, brightness: Brightness.light), buttonTheme: const ButtonThemeData(height: 48)),
       darkTheme: ThemeData(useMaterial3: false, colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue, brightness: Brightness.dark), buttonTheme: const ButtonThemeData(height: 48)),
       themeMode: ThemeMode.light,
 
@@ -57,7 +57,10 @@ class MainWidget extends StatelessWidget {
               //   margin: const EdgeInsets.symmetric(vertical: 4),
               //   child: Text(e),
               // ),
-              OnProcessButtonWidget(child: Text("Language $e")),
+              OnProcessButtonWidget(
+            expanded: false,
+            child: Text("Language $e"),
+          ),
         )
         .toList();
 
@@ -72,14 +75,14 @@ class MainWidget extends StatelessWidget {
         title: const Text("Please select your Language"),
         footer: Column(
           children: [
-            // OnProcessButtonWidget(
-            //   expanded: false,
-            //   onTap: () async {
-            //     await showCustomDialog(context, intend + 1);
-            //     return;
-            //   },
-            //   child: const Text("Okay"),
-            // ),
+            OnProcessButtonWidget(
+              expanded: false,
+              onTap: () async {
+                await showCustomDialog(context, intend + 1);
+                return;
+              },
+              child: const Text("Okay"),
+            ),
             const TextField(),
           ],
         ),

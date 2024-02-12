@@ -139,107 +139,187 @@ class OnPopupWindowWidget extends StatelessWidget {
 
   final bool _fullScreenMode;
 
-  Color inverseCanvasColor(Color color) {
-    return Color.fromRGBO(255 - color.red, 255 - color.green, 255 - color.blue, color.opacity);
-  }
+  Color inverseCanvasColor(Color color) => Color.fromRGBO(255 - color.red, 255 - color.green, 255 - color.blue, color.opacity);
+
+  // final ValueKey _keyMainWidget = const ValueKey("shajed99/on_popup_window_widget/mainWidget");
+  // final ValueKey _keyTitleChild = const ValueKey("shajed99/on_popup_window_widget/titleChild");
+  // final ValueKey _keyChildChild = const ValueKey("shajed99/on_popup_window_widget/childChild");
+  // final ValueKey _keyFooterChild = const ValueKey("shajed99/on_popup_window_widget/footerChild");
 
   @override
   Widget build(BuildContext context) {
-    MediaQueryData m = MediaQuery.of(context);
-    ThemeData theme = Theme.of(context);
-    double bh = theme.buttonTheme.height;
-    bool landscape = supportedOrientation != null ? Orientation.landscape == supportedOrientation : MediaQuery.orientationOf(context) == Orientation.landscape;
-    bool showPadding = ((landscape ? m.size.width : m.size.height) - m.viewInsets.bottom) < (biggerMaxSize ?? bh * 16);
-    double maxWidth = landscape ? biggerMaxSize ?? (bh * 16) : smallerMaxSize ?? (bh * 10);
-    double maxHeight = !landscape ? biggerMaxSize ?? (bh * 16) : smallerMaxSize ?? (bh * 10);
+    // MediaQueryData m = MediaQuery.of(context);
+    // ThemeData theme = Theme.of(context);
+    // double bh = theme.buttonTheme.height;
+    // bool landscape = supportedOrientation != null ? Orientation.landscape == supportedOrientation : MediaQuery.orientationOf(context) == Orientation.landscape;
+    // bool showPadding = ((landscape ? m.size.width : m.size.height) - m.viewInsets.bottom) < (biggerMaxSize ?? bh * 16);
+    // double maxWidth = landscape ? biggerMaxSize ?? (bh * 16) : smallerMaxSize ?? (bh * 10);
+    // double maxHeight = !landscape ? biggerMaxSize ?? (bh * 16) : smallerMaxSize ?? (bh * 10);
+    // // double p = (contentPadding ?? theme.buttonTheme.height / 2);
     // double p = (contentPadding ?? theme.buttonTheme.height / 2);
-    double p = (contentPadding ?? theme.buttonTheme.height / 2);
 
-    bool material3 = useMaterial3 ?? theme.useMaterial3;
-    Color fc = fontColor ?? (material3 ? theme.colorScheme.onBackground : inverseCanvasColor(theme.canvasColor));
+    // bool material3 = useMaterial3 ?? theme.useMaterial3;
+    // Color fc = fontColor ?? (material3 ? theme.colorScheme.onBackground : inverseCanvasColor(theme.canvasColor));
 
-    Widget size([i]) => SizedBox(height: p / (i ?? 2), width: p / (i ?? 2));
+    // Widget size([i]) => SizedBox(height: p / (i ?? 2), width: p / (i ?? 2));
 
-    Widget animatedSize2(Widget? innerChild) {
-      if (title == null && child == null && footer == null) {
-        return const SizedBox();
-      }
-      return AnimatedContainer(
-        width: maxWidth,
-        curve: Curves.easeInOut,
-        duration: duration,
-        constraints: BoxConstraints(maxWidth: maxWidth),
-        child: innerChild ?? const SizedBox(),
-      );
-    }
+    // Widget animatedSize2(Widget? innerChild) {
+    //   if (title == null && child == null && footer == null) {
+    //     return const SizedBox();
+    //   }
+    //   return AnimatedContainer(
+    //     width: maxWidth,
+    //     curve: Curves.easeInOut,
+    //     duration: duration,
+    //     constraints: BoxConstraints(maxWidth: maxWidth),
+    //     child: innerChild ?? const SizedBox(),
+    //   );
+    // }
 
-    Widget titleChild() {
-      if (title == null) return const SizedBox();
+    // Widget titleChild() {
+    //   if (title == null) return const SizedBox();
 
-      bool c = (centerTitle ?? (theme.appBarTheme.centerTitle ?? false));
+    //   bool c = (centerTitle ?? (theme.appBarTheme.centerTitle ?? false));
 
-      return Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: c ? CrossAxisAlignment.center : CrossAxisAlignment.start,
-        children: [
-          DefaultTextStyle(
-            textAlign: c ? TextAlign.center : TextAlign.start,
-            style: titleTextStyle ?? theme.dialogTheme.titleTextStyle ?? theme.textTheme.titleSmall?.copyWith(color: fc, fontWeight: FontWeight.bold) ?? TextStyle(color: fontColor ?? theme.colorScheme.onBackground),
-            child: Padding(padding: EdgeInsets.symmetric(horizontal: p), child: title!),
-          ),
-          size(),
-          divider ?? const Divider(height: 0),
-          size(4),
-        ],
-      );
-    }
+    //   return Column(
+    //     // key: _keyTitleChild,
+    //     mainAxisSize: MainAxisSize.min,
+    //     crossAxisAlignment: c ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+    //     children: [
+    //       DefaultTextStyle(
+    //         textAlign: c ? TextAlign.center : TextAlign.start,
+    //         style: titleTextStyle ?? theme.dialogTheme.titleTextStyle ?? theme.textTheme.titleSmall?.copyWith(color: fc, fontWeight: FontWeight.bold) ?? TextStyle(color: fontColor ?? theme.colorScheme.onBackground),
+    //         child: Padding(padding: EdgeInsets.symmetric(horizontal: p), child: title!),
+    //       ),
+    //       size(),
+    //       divider ?? const Divider(height: 0),
+    //       size(4),
+    //     ],
+    //   );
+    // }
 
-    Widget childChild() {
-      if (child == null) return const SizedBox();
+    // Widget childChild() {
+    //   if (child == null) return const SizedBox();
 
-      return Flexible(
-        child: SingleChildScrollView(
-          controller: childScrollController,
-          child: AnimatedSize(
-            alignment: Alignment.topCenter,
-            curve: Curves.easeInOut,
-            duration: duration,
-            child: Container(
-              constraints: BoxConstraints(maxWidth: maxWidth),
-              margin: EdgeInsets.only(top: p / 4, bottom: p / 4),
-              padding: EdgeInsets.symmetric(horizontal: p),
-              child: child,
-            ),
-          ),
-        ),
-      );
-    }
+    //   return Flexible(
+    //     // key: _keyChildChild,
+    //     child: SingleChildScrollView(
+    //       controller: childScrollController,
+    //       child: AnimatedSize(
+    //         alignment: Alignment.topCenter,
+    //         curve: Curves.easeInOut,
+    //         duration: duration,
+    //         child: AnimatedContainer(
+    //           constraints: BoxConstraints(maxWidth: maxWidth),
+    //           margin: EdgeInsets.only(top: p / 4, bottom: p / 4),
+    //           padding: EdgeInsets.symmetric(horizontal: p),
+    //           duration: duration,
+    //           child: child,
+    //         ),
+    //       ),
+    //     ),
+    //   );
+    // }
 
-    Widget footerChild() {
-      if (footer == null) return const SizedBox();
-      return Container(
-        padding: EdgeInsets.only(left: p, right: p, top: p / 4),
-        alignment: Alignment.centerRight,
-        child: footer,
-      );
-    }
+    // Widget footerChild() {
+    //   if (footer == null) return const SizedBox();
+    //   return Container(
+    //     // key: _keyFooterChild,
+    //     padding: EdgeInsets.only(left: p, right: p, top: p / 4),
+    //     alignment: Alignment.centerRight,
+    //     child: footer,
+    //   );
+    // }
 
     Widget mainWidget() {
-      return AnimatedContainer(
-        curve: Curves.easeInOut,
-        duration: duration,
-        alignment: Alignment.center,
-        constraints: BoxConstraints(maxHeight: maxHeight),
-        margin: mainWindowPadding ??
-            EdgeInsets.only(
-              left: (landscape ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4)) : p) + m.viewInsets.left,
-              right: (landscape ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4)) : p) + m.viewInsets.right,
-              top: (!landscape ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4)) : p) + m.viewInsets.top,
-              bottom: (!landscape ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4)) : p) + m.viewInsets.bottom,
+      return LayoutBuilder(builder: (context, box) {
+        MediaQueryData m = MediaQuery.of(context);
+        final width = m.size.width;
+        final height = m.size.height;
+        ThemeData theme = Theme.of(context);
+        double bh = theme.buttonTheme.height;
+        bool landscape = supportedOrientation != null ? Orientation.landscape == supportedOrientation : MediaQuery.orientationOf(context) == Orientation.landscape;
+        bool showPadding = ((landscape ? width : height) - m.viewInsets.bottom) < (biggerMaxSize ?? bh * 16);
+        double maxWidth = landscape ? biggerMaxSize ?? (bh * 16) : smallerMaxSize ?? (bh * 10);
+        double maxHeight = !landscape ? biggerMaxSize ?? (bh * 16) : smallerMaxSize ?? (bh * 10);
+        // double p = (contentPadding ?? theme.buttonTheme.height / 2);
+        double p = (contentPadding ?? theme.buttonTheme.height / 2);
+
+        bool material3 = useMaterial3 ?? theme.useMaterial3;
+        Color fc = fontColor ?? (material3 ? theme.colorScheme.onBackground : inverseCanvasColor(theme.canvasColor));
+
+        Widget size([i]) => SizedBox(height: p / (i ?? 2), width: p / (i ?? 2));
+
+        Widget animatedSize2(Widget? innerChild) {
+          if (title == null && child == null && footer == null) {
+            return const SizedBox();
+          }
+          return AnimatedContainer(
+            width: maxWidth,
+            curve: Curves.easeInOut,
+            duration: duration,
+            constraints: BoxConstraints(maxWidth: maxWidth),
+            child: innerChild ?? const SizedBox(),
+          );
+        }
+
+        Widget titleChild() {
+          if (title == null) return const SizedBox();
+
+          bool c = (centerTitle ?? (theme.appBarTheme.centerTitle ?? false));
+
+          return Column(
+            // key: _keyTitleChild,
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: c ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+            children: [
+              DefaultTextStyle(
+                textAlign: c ? TextAlign.center : TextAlign.start,
+                style: titleTextStyle ?? theme.dialogTheme.titleTextStyle ?? theme.textTheme.titleSmall?.copyWith(color: fc, fontWeight: FontWeight.bold) ?? TextStyle(color: fontColor ?? theme.colorScheme.onBackground),
+                child: Padding(padding: EdgeInsets.symmetric(horizontal: p), child: title!),
+              ),
+              size(),
+              divider ?? const Divider(height: 0),
+              size(4),
+            ],
+          );
+        }
+
+        Widget childChild() {
+          if (child == null) return const SizedBox();
+
+          return Flexible(
+            // key: _keyChildChild,
+            child: SingleChildScrollView(
+              controller: childScrollController,
+              child: AnimatedSize(
+                alignment: Alignment.topCenter,
+                curve: Curves.easeInOut,
+                duration: duration,
+                child: AnimatedContainer(
+                  constraints: BoxConstraints(maxWidth: maxWidth),
+                  margin: EdgeInsets.only(top: p / 4, bottom: p / 4),
+                  padding: EdgeInsets.symmetric(horizontal: p),
+                  duration: duration,
+                  child: child,
+                ),
+              ),
             ),
-        child: Container(
-          margin: EdgeInsets.all(p * intend),
-          child: Stack(
+          );
+        }
+
+        Widget footerChild() {
+          if (footer == null) return const SizedBox();
+          return Container(
+            // key: _keyFooterChild,
+            padding: EdgeInsets.only(left: p, right: p, top: p / 4),
+            alignment: Alignment.centerRight,
+            child: footer,
+          );
+        }
+
+        Widget subMainWindow() {
+          return Stack(
             clipBehavior: Clip.none,
             children: [
               Material(
@@ -275,9 +355,34 @@ class OnPopupWindowWidget extends StatelessWidget {
               ),
               for (Widget w in overlapChildren) w
             ],
-          ),
-        ),
-      );
+          );
+        }
+
+        return !_fullScreenMode
+            ? subMainWindow()
+            : Align(
+                child: FittedBox(
+                  fit: showPadding ? BoxFit.contain : BoxFit.none,
+                  child: AnimatedContainer(
+                    curve: Curves.easeInOut,
+                    duration: duration,
+                    alignment: Alignment.center,
+                    constraints: BoxConstraints(maxHeight: maxHeight),
+                    margin: mainWindowPadding ??
+                        EdgeInsets.only(
+                          left: (landscape ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4)) : p) + m.viewInsets.left,
+                          right: (landscape ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4)) : p) + m.viewInsets.right,
+                          top: (!landscape ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4)) : p) + m.viewInsets.top,
+                          bottom: (!landscape ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4)) : p) + m.viewInsets.bottom,
+                        ),
+                    child: Container(
+                      margin: EdgeInsets.all(p * intend),
+                      child: subMainWindow(),
+                    ),
+                  ),
+                ),
+              );
+      });
     }
 
     if (!_fullScreenMode) return mainWidget();
@@ -286,9 +391,33 @@ class OnPopupWindowWidget extends StatelessWidget {
       removeLeft: true,
       removeTop: true,
       removeRight: true,
-      removeBottom: true,
+      // removeBottom: true,
       context: context,
+      // child: showPadding
+      //     ? FittedBox(
+      //         alignment: mainWindowAlignment,
+      //         child: mainWidget(),
+      //       )
+      //     : Align(
+      //         alignment: mainWindowAlignment,
+      //         child: mainWidget(),
+      //       ),
       child: mainWidget(),
+      // child: LayoutBuilder(
+      //   builder: (context, box) {
+      //     if (showPadding) {
+      //       return FittedBox(
+      //         alignment: mainWindowAlignment,
+      //         child: mainWidget(),
+      //       );
+      //     } else {
+      //       return Align(
+      //         alignment: mainWindowAlignment,
+      //         child: mainWidget(),
+      //       );
+      //     }
+      //   },
+      // ),
     );
   }
 }
