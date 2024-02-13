@@ -34,6 +34,8 @@ class MyApp extends StatelessWidget {
 class MainWidget extends StatelessWidget {
   MainWidget({super.key});
 
+  final FocusNode _focusNode = FocusNode();
+
   final List<String> lan = [
     "Bangle",
     "English",
@@ -83,7 +85,9 @@ class MainWidget extends StatelessWidget {
               },
               child: const Text("Okay"),
             ),
-            const TextField(),
+            TextField(
+              focusNode: _focusNode,
+            ),
           ],
         ),
         overlapChildren: [
@@ -134,24 +138,25 @@ class MainWidget extends StatelessWidget {
           OnProcessButtonWidget(
             expanded: false,
             onTap: () async {
-              await showCustomDialog(context, 1);
+              await showCustomDialog(context, 0);
               return;
             },
             child: const Text("Overlay Widget"),
           ),
 
-          const Dialog(
-            child: Padding(
-                padding: EdgeInsets.all(8),
-                child: Column(
-                  children: [
-                    OnProcessButtonWidget(
-                      child: Text("Heading"),
-                    ),
-                    Text("Heading"),
-                  ],
-                )),
-          )
+          OnProcessButtonWidget(
+            onTap: () async {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return const Dialog(
+                    child: TextField(),
+                  );
+                },
+              );
+            },
+            child: const Text("Dialog"),
+          ),
 
           //! Widget Mode
           // OnPopupWindowWidget.widgetMode(
