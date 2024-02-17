@@ -182,25 +182,39 @@ class _OnPopupWindowWidgetState extends State<OnPopupWindowWidget> {
       );
     }
 
+    Widget sizeBuilder({required Widget child}) {
+      print("ABC - $width  $showPadding");
+      return Container(
+        // color: Colors.amber,
+        width: showPadding ? width : null,
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: child,
+        ),
+      );
+    }
+
     Widget titleChild() {
       if (widget.title == null) return const SizedBox();
 
       bool c = (widget.centerTitle ?? (theme.appBarTheme.centerTitle ?? false));
 
-      return Column(
-        // key: _keyTitleChild,
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: c ? CrossAxisAlignment.center : CrossAxisAlignment.start,
-        children: [
-          DefaultTextStyle(
-            textAlign: c ? TextAlign.center : TextAlign.start,
-            style: widget.titleTextStyle ?? theme.dialogTheme.titleTextStyle ?? theme.textTheme.titleSmall?.copyWith(color: fc, fontWeight: FontWeight.bold) ?? TextStyle(color: widget.fontColor ?? theme.colorScheme.onBackground),
-            child: Padding(padding: EdgeInsets.symmetric(horizontal: p), child: widget.title!),
-          ),
-          size(),
-          widget.divider ?? const Divider(height: 0),
-          size(4),
-        ],
+      return sizeBuilder(
+        child: Column(
+          // key: _keyTitleChild,
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: c ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+          children: [
+            DefaultTextStyle(
+              textAlign: c ? TextAlign.center : TextAlign.start,
+              style: widget.titleTextStyle ?? theme.dialogTheme.titleTextStyle ?? theme.textTheme.titleSmall?.copyWith(color: fc, fontWeight: FontWeight.bold) ?? TextStyle(color: widget.fontColor ?? theme.colorScheme.onBackground),
+              child: Padding(padding: EdgeInsets.symmetric(horizontal: p), child: widget.title!),
+            ),
+            size(),
+            widget.divider ?? const Divider(height: 0),
+            size(4),
+          ],
+        ),
       );
     }
 
@@ -237,45 +251,42 @@ class _OnPopupWindowWidgetState extends State<OnPopupWindowWidget> {
       );
     }
 
-    Widget subMainWindow1 = KeepAlive(
-      keepAlive: true,
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          Material(
-            elevation: widget.windowElevation ?? theme.dialogTheme.elevation ?? theme.buttonTheme.height / 2,
-            clipBehavior: Clip.antiAlias,
-            surfaceTintColor: Colors.transparent,
-            color: theme.colorScheme.background,
-            borderRadius: widget.borderRadius ?? BorderRadius.circular(theme.buttonTheme.height / 2),
-            child: Container(
-              padding: EdgeInsets.symmetric(vertical: p),
-              decoration: BoxDecoration(color: material3 ? theme.dialogTheme.backgroundColor ?? theme.colorScheme.primary.withOpacity(0.1) : theme.canvasColor),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  animatedSize2(titleChild()),
-                  Flexible(
-                    child: DefaultTextStyle(
-                      textAlign: widget.defaultTextAlign,
-                      style: widget.defaultTextStyle ?? theme.dialogTheme.contentTextStyle ?? theme.textTheme.titleSmall?.copyWith(color: fc) ?? TextStyle(color: widget.fontColor ?? theme.colorScheme.onBackground),
-                      child: Column(
-                        crossAxisAlignment: widget.childCrossAxisAlignment,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          childChild(),
-                          animatedSize2(footerChild()),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+    Widget subMainWindow1 = Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Material(
+          elevation: widget.windowElevation ?? theme.dialogTheme.elevation ?? theme.buttonTheme.height / 2,
+          clipBehavior: Clip.antiAlias,
+          surfaceTintColor: Colors.transparent,
+          color: theme.colorScheme.background,
+          borderRadius: widget.borderRadius ?? BorderRadius.circular(theme.buttonTheme.height / 2),
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: p),
+            decoration: BoxDecoration(color: material3 ? theme.dialogTheme.backgroundColor ?? theme.colorScheme.primary.withOpacity(0.1) : theme.canvasColor),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                animatedSize2(titleChild()),
+                // Flexible(
+                //   child: DefaultTextStyle(
+                //     textAlign: widget.defaultTextAlign,
+                //     style: widget.defaultTextStyle ?? theme.dialogTheme.contentTextStyle ?? theme.textTheme.titleSmall?.copyWith(color: fc) ?? TextStyle(color: widget.fontColor ?? theme.colorScheme.onBackground),
+                //     child: Column(
+                //       crossAxisAlignment: widget.childCrossAxisAlignment,
+                //       mainAxisSize: MainAxisSize.min,
+                //       children: [
+                //         childChild(),
+                //         animatedSize2(footerChild()),
+                //       ],
+                //     ),
+                //   ),
+                // ),
+              ],
             ),
           ),
-          for (Widget w in widget.overlapChildren) w
-        ],
-      ),
+        ),
+        for (Widget w in widget.overlapChildren) w
+      ],
     );
 
     double? left() {
@@ -296,25 +307,23 @@ class _OnPopupWindowWidgetState extends State<OnPopupWindowWidget> {
 
     return !widget._fullScreenMode
         ? subMainWindow1
-        : Align(
-            child: AnimatedContainer(
-              curve: widget.curve,
-              duration: widget.duration,
-              // width: m.size.width - (left() ?? 0) - (right() ?? 0),
-              // height: m.size.height - (top() ?? 0) - (bottom() ?? 0),
-              alignment: Alignment.center,
-              constraints: BoxConstraints(maxHeight: maxHeight, maxWidth: maxWidth),
-              margin: widget.mainWindowPadding ??
-                  EdgeInsets.only(
-                    left: left() ?? 0,
-                    right: right() ?? 0,
-                    top: top() ?? 0,
-                    bottom: bottom() ?? 0,
-                  ),
-              child: Container(
-                margin: EdgeInsets.all(p * widget.intend),
-                child: subMainWindow1,
-              ),
+        : AnimatedContainer(
+            curve: widget.curve,
+            duration: widget.duration,
+            // width: m.size.width - (left() ?? 0) - (right() ?? 0),
+            // height: m.size.height - (top() ?? 0) - (bottom() ?? 0),
+            alignment: Alignment.center,
+            constraints: BoxConstraints(maxHeight: maxHeight, maxWidth: maxWidth),
+            margin: widget.mainWindowPadding ??
+                EdgeInsets.only(
+                  left: left() ?? 0,
+                  right: right() ?? 0,
+                  top: top() ?? 0,
+                  bottom: bottom() ?? 0,
+                ),
+            child: Container(
+              margin: EdgeInsets.all(p * widget.intend),
+              child: subMainWindow1,
             ),
           );
   }
