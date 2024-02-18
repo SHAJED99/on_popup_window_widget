@@ -31,10 +31,12 @@ class OnPopupWindowWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _duration = kThemeAnimationDuration;
+    const duration = kThemeAnimationDuration;
 
     Widget mainWidget() {
-      return AnimatedContainer(duration: duration);
+      return AnimatedContainer(
+        duration: duration,
+      );
     }
 
     return MediaQuery.removeViewInsets(
