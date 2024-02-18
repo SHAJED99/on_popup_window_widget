@@ -31,8 +31,7 @@ class OnPopupWindowWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-_duration = Theme.of(context).snackBarTheme.;
-
+    _duration = kThemeAnimationDuration;
 
     Widget mainWidget() {
       return AnimatedContainer(duration: duration);
