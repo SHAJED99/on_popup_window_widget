@@ -75,20 +75,25 @@ class MainWidget extends StatelessWidget {
       builder: (context) => OnPopupWindowWidget(
         intend: intend,
         title: const Text("Please select your Language"),
-        footer: Column(
-          children: [
-            OnProcessButtonWidget(
-              expanded: false,
-              onTap: () async {
-                await showCustomDialog(context, intend + 1);
-                return;
-              },
-              child: const Text("Okay"),
-            ),
-            TextField(
-              focusNode: _focusNode,
-            ),
-          ],
+        footer: Container(
+          color: Colors.red,
+          child: Column(
+            children: [
+              OnProcessButtonWidget(
+                // expanded: false,
+                onTap: () async {
+                  await showCustomDialog(context, intend + 1);
+                  return;
+                },
+                child: const Text("Okay Okay Okay"),
+              ),
+              // Row(
+              //   children: [
+              //     Expanded(child: TextFormField()),
+              //   ],
+              // ),
+            ],
+          ),
         ),
         overlapChildren: [
           Positioned(
@@ -103,9 +108,12 @@ class MainWidget extends StatelessWidget {
             ),
           ),
         ],
-        child: Column(
-          // mainAxisAlignment: MainAxisAlignment.start,
-          children: children(context),
+        child: Container(
+          color: Colors.green,
+          child: Column(
+            // mainAxisAlignment: MainAxisAlignment.start,
+            children: children(context),
+          ),
         ),
       ),
     );
