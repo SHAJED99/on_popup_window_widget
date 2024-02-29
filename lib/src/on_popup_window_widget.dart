@@ -8,7 +8,7 @@ class OnPopupWindowWidget extends StatelessWidget {
     this.footer,
     this.intend = 1,
     this.overlapChildren = const [],
-    this.duration,
+    this.duration = kThemeAnimationDuration,
     this.biggerMaxSize,
     this.smallerMaxSize,
     this.supportedOrientation,
@@ -32,7 +32,7 @@ class OnPopupWindowWidget extends StatelessWidget {
 
   /// Container size changing animation duration
   /// Default: kThemeAnimationDuration
-  final Duration? duration;
+  final Duration duration;
 
   /// Window bigger max size
   /// Default: theme.buttonTheme.height * 18
@@ -53,89 +53,106 @@ class OnPopupWindowWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final landscape = supportedOrientation != null ? Orientation.landscape == supportedOrientation : MediaQuery.orientationOf(context) == Orientation.landscape;
 
-    const duration = kThemeAnimationDuration; //! TODO
     final theme = Theme.of(context);
     final m = MediaQuery.of(context);
     final bh = theme.buttonTheme.height;
     final width = m.size.width;
     final height = m.size.height;
-    final showPadding = ((landscape ? width : height) - m.viewInsets.bottom) < (biggerMaxSize ?? bh * 16);
 
-    final double padding = (contentPadding ?? bh / 2);
-    final hPadding = padding; //! TODO
-    final vPadding = padding; //! TODO
+    // final showPadding = ((landscape ? width : height) - m.viewInsets.bottom) < (biggerMaxSize ?? bh * 16);
+
+    // final double padding = (contentPadding ?? bh / 2);
+    // final hPadding = padding; //! TODO
+    // final vPadding = padding; //! TODO
     final maxWidth = landscape ? biggerMaxSize ?? (bh * 18) : smallerMaxSize ?? (bh * 10);
     final maxHeight = !landscape ? biggerMaxSize ?? (bh * 18) : smallerMaxSize ?? (bh * 10);
 
-    Widget animatedChild1({Widget? child}) {
-      if (child == null) return const SizedBox();
+    // Widget animatedChild1({Widget? child}) {
+    //   if (child == null) return const SizedBox();
 
-      return AnimatedContainer(
-        duration: duration,
-        decoration: const BoxDecoration(color: Colors.amber),
-        constraints: BoxConstraints(
-          maxWidth: maxWidth,
-          maxHeight: maxHeight,
-        ),
-        child: child,
-      );
-    }
+    //   return AnimatedContainer(
+    //     duration: duration,
+    //     decoration: const BoxDecoration(color: Colors.amber),
+    //     constraints: BoxConstraints(
+    //       maxWidth: maxWidth,
+    //       maxHeight: maxHeight,
+    //     ),
+    //     child: child,
+    //   );
+    // }
 
-    Widget animatedChild2({Widget? child}) {
-      if (child == null) return const SizedBox();
+    // Widget animatedChild2({Widget? child}) {
+    //   if (child == null) return const SizedBox();
 
-      return AnimatedContainer(
-        padding: EdgeInsets.symmetric(horizontal: hPadding, vertical: vPadding / 2),
-        duration: duration,
-        child: child,
-      );
-    }
+    //   return AnimatedContainer(
+    //     duration: duration,
+    //     child: child,
+    //   );
+    // }
 
-    Widget fitMe({Widget? child}) {
-      if (child == null) return const SizedBox();
+    // Widget fitMe({Widget? child}) {
+    //   if (child == null) return const SizedBox();
 
-      return FittedBox(
-        fit: BoxFit.scaleDown,
-        child: animatedChild2(
-          child: child,
-        ),
-      );
-    }
+    //   return FittedBox(
+    //     fit: BoxFit.scaleDown,
+    //     child: animatedChild2(
+    //       child: child,
+    //     ),
+    //   );
+    // }
 
-    Widget mainPadding({Widget? child}) {
+    // Widget mainPadding({Widget? child}) {
+    //   return Container(
+    //     constraints: BoxConstraints(maxWidth: width - hPadding, maxHeight: height - vPadding),
+    //     child: child,
+    //   );
+    // }
+
+    // Widget mainWidget() {
+    //   return mainPadding(
+    //     child: Material(
+    //       elevation: 24, //! TODO
+    //       clipBehavior: Clip.antiAlias,
+    //       borderRadius: BorderRadius.circular(padding / 2), //! TODO
+    //       child: animatedChild1(
+    //         child: Column(
+    //           // crossAxisAlignment: CrossAxisAlignment.stretch,
+    //           mainAxisSize: MainAxisSize.min,
+    //           children: [
+    //             //! Title
+    //             Padding(
+    //               padding: const EdgeInsets.only(),
+    //               child: fitMe(child: title),
+    //             ),
+
+    //             //! Child
+    //             Flexible(
+    //               child: SingleChildScrollView(
+    //                 child: fitMe(child: child),
+    //               ),
+    //             ),
+
+    //             //! Footer
+    //             fitMe(child: footer),
+    //           ],
+    //         ),
+    //       ),
+    //     ),
+    //   );
+    // }
+
+    Widget mainScreenPadding(Widget? c) {
       return Container(
-        constraints: BoxConstraints(maxWidth: width - hPadding, maxHeight: height - vPadding),
-        child: child,
+        margin: EdgeInsets.symmetric(horizontal: contentPadding ?? 24),
+        child: c,
       );
     }
 
     Widget mainWidget() {
-      return mainPadding(
-        child: Material(
-          elevation: 24, //! TODO
-          clipBehavior: Clip.antiAlias,
-          borderRadius: BorderRadius.circular(padding / 2), //! TODO
-          child: animatedChild1(
-            child: Column(
-              // crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                //! Title
-                fitMe(child: title),
-
-                //! Child
-                Flexible(
-                  child: SingleChildScrollView(
-                    child: fitMe(child: child),
-                  ),
-                ),
-
-                //! Footer
-                fitMe(child: footer),
-              ],
-            ),
-          ),
-        ),
+      return Container(
+        alignment: Alignment.center,
+        constraints: BoxConstraints(maxWidth: maxWidth),
+        child: mainScreenPadding(child),
       );
     }
 
