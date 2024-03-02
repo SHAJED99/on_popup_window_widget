@@ -171,23 +171,26 @@ class OnPopupWindowWidget extends StatelessWidget {
       context: context,
       child: Container(
         margin: EdgeInsets.only(top: vP.top, bottom: vP.bottom, left: vP.left, right: vP.right),
-        child: Align(
-          child: Material(
-            type: MaterialType.canvas,
-            color: Colors.transparent,
-            child: Container(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    if (title != null) title!,
-                    if (child != null) child!,
-                    if (footer != null) footer!
-                  ],
+        child: Align(child: LayoutBuilder(
+          builder: (_, constrains) {
+            print(constrains.flipped);
+            return Material(
+              // color: Colors.transparent,
+
+              child: Container(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      if (title != null) title!,
+                      if (child != null) child!,
+                      if (footer != null) footer!
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ),
-        ),
+            );
+          },
+        )),
       ),
     );
   }
