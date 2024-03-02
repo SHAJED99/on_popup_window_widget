@@ -9,10 +9,11 @@ class OnPopupWindowWidget extends StatelessWidget {
     this.intend = 1,
     this.overlapChildren = const [],
     this.duration = kThemeAnimationDuration,
+    this.animationCurve = Curves.easeInOut,
     this.biggerMaxSize,
     this.smallerMaxSize,
     this.supportedOrientation,
-    this.contentPadding,
+    this.mainPadding,
   }) : super(key: key);
 
   /// Popup window title
@@ -47,7 +48,9 @@ class OnPopupWindowWidget extends StatelessWidget {
   final Orientation? supportedOrientation;
 
   /// Default: theme.buttonTheme.height/2
-  final double? contentPadding;
+  final EdgeInsetsGeometry? mainPadding;
+
+  final Curve animationCurve;
 
   @override
   Widget build(BuildContext context) {
@@ -55,13 +58,14 @@ class OnPopupWindowWidget extends StatelessWidget {
 
     final theme = Theme.of(context);
     final m = MediaQuery.of(context);
+    final vP = m.viewInsets;
     final bh = theme.buttonTheme.height;
     final width = m.size.width;
     final height = m.size.height;
 
     // final showPadding = ((landscape ? width : height) - m.viewInsets.bottom) < (biggerMaxSize ?? bh * 16);
 
-    // final double padding = (contentPadding ?? bh / 2);
+    // final double padding = (mainPadding ?? bh / 2);
     // final hPadding = padding; //! TODO
     // final vPadding = padding; //! TODO
     final maxWidth = landscape ? biggerMaxSize ?? (bh * 18) : smallerMaxSize ?? (bh * 10);
@@ -90,16 +94,16 @@ class OnPopupWindowWidget extends StatelessWidget {
     //   );
     // }
 
-    // Widget fitMe({Widget? child}) {
-    //   if (child == null) return const SizedBox();
+    Widget fitMe({Widget? child}) {
+      if (child == null) return const SizedBox();
 
-    //   return FittedBox(
-    //     fit: BoxFit.scaleDown,
-    //     child: animatedChild2(
-    //       child: child,
-    //     ),
-    //   );
-    // }
+      return FittedBox(
+        fit: BoxFit.scaleDown,
+        // child: animatedChild2(
+        child: child,
+        // ),
+      );
+    }
 
     // Widget mainPadding({Widget? child}) {
     //   return Container(
@@ -141,29 +145,48 @@ class OnPopupWindowWidget extends StatelessWidget {
     //   );
     // }
 
-    Widget mainScreenPadding(Widget? c) {
-      return Container(
-        margin: EdgeInsets.symmetric(horizontal: contentPadding ?? 24),
-        child: c,
-      );
-    }
+    // Widget mainScreenPadding(Widget? c) {
+    //   return Container(
+    //     // margin: mainPadding ?? EdgeInsets.all(bh / 2),
+    //     padding: mainPadding ?? EdgeInsets.all(bh / 2),
+    //     child: c,
+    //   );
+    // }
 
-    Widget mainWidget() {
-      return Container(
-        alignment: Alignment.center,
-        constraints: BoxConstraints(maxWidth: maxWidth),
-        child: mainScreenPadding(child),
-      );
-    }
+    // Widget mainWidget() {
+    //   return Container(
+    //     decoration: BoxDecoration(color: theme.colorScheme.background),
+    //     constraints: BoxConstraints(maxWidth: maxWidth),
+    //     child: mainScreenPadding(child),
+    //   );
+    // }
+
+    Widget animatedContainer(Widget c) => AnimatedContainer(duration: duration, curve: animationCurve, child: c);
 
     return MediaQuery.removeViewInsets(
       removeLeft: true,
       removeTop: true,
       removeRight: true,
+      removeBottom: true,
       context: context,
-      child: Align(
-        child: SingleChildScrollView(
-          child: mainWidget(),
+      child: Container(
+        margin: EdgeInsets.only(top: vP.top, bottom: vP.bottom, left: vP.left, right: vP.right),
+        child: Align(
+          child: Material(
+            type: MaterialType.canvas,
+            color: Colors.transparent,
+            child: Container(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    if (title != null) title!,
+                    if (child != null) child!,
+                    if (footer != null) footer!
+                  ],
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );
