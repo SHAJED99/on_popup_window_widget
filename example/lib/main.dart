@@ -17,8 +17,16 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
 
-      theme: ThemeData(useMaterial3: false, colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue, brightness: Brightness.dark), buttonTheme: const ButtonThemeData(height: h)),
-      darkTheme: ThemeData(useMaterial3: false, colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue, brightness: Brightness.dark), buttonTheme: const ButtonThemeData(height: h)),
+      theme: ThemeData(
+          useMaterial3: false,
+          colorScheme: ColorScheme.fromSeed(
+              seedColor: Colors.blue, brightness: Brightness.dark),
+          buttonTheme: const ButtonThemeData(height: h)),
+      darkTheme: ThemeData(
+          useMaterial3: false,
+          colorScheme: ColorScheme.fromSeed(
+              seedColor: Colors.blue, brightness: Brightness.dark),
+          buttonTheme: const ButtonThemeData(height: h)),
       themeMode: ThemeMode.light,
       // themeMode: ThemeMode.dark,
       home: Scaffold(
@@ -124,7 +132,8 @@ class MainWidget extends StatelessWidget {
             context: context,
             builder: (context) => OnPopupWindowWidget(
               title: const Text("Please select your Language"),
-              footer: const OnProcessButtonWidget(expanded: false, child: Text("Okay")),
+              footer: const OnProcessButtonWidget(
+                  expanded: false, child: Text("Okay")),
               child: Column(children: children(context)),
             ),
           ),

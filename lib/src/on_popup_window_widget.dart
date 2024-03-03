@@ -1,11 +1,65 @@
 import 'package:flutter/material.dart';
 
 class OnPopupWindowWidget extends StatelessWidget {
-  const OnPopupWindowWidget({Key? key, this.mainWindowAlignment = Alignment.center, this.borderRadius, this.child, this.contentPadding, this.centerTitle, this.defaultTextStyle, this.defaultTextAlign = TextAlign.center, this.duration = const Duration(milliseconds: 500), this.footer, this.mainWindowPadding, this.mainWindowMaxPadding, this.smallerMaxSize, this.biggerMaxSize, this.title, this.divider, this.supportedOrientation, this.titleTextStyle, this.windowElevation, this.overlapChildren = const [], this.useMaterial3, this.fontColor, this.childScrollController, this.intend = 1, this.animationCurve = Curves.easeInOut})
+  const OnPopupWindowWidget(
+      {Key? key,
+      this.mainWindowAlignment = Alignment.center,
+      this.borderRadius,
+      this.child,
+      this.contentPadding,
+      this.centerTitle,
+      this.defaultTextStyle,
+      this.defaultTextAlign = TextAlign.center,
+      this.duration = const Duration(milliseconds: 500),
+      this.footer,
+      this.mainWindowPadding,
+      this.mainWindowMaxPadding,
+      this.smallerMaxSize,
+      this.biggerMaxSize,
+      this.title,
+      this.divider,
+      this.supportedOrientation,
+      this.titleTextStyle,
+      this.windowElevation,
+      this.overlapChildren = const [],
+      this.useMaterial3,
+      this.fontColor,
+      this.childScrollController,
+      this.intend = 1,
+      this.animationCurve = Curves.easeInOut,
+      this.responsiveMinSize,
+      this.backgroundColor})
       : _fullScreenMode = true,
         super(key: key);
 
-  const OnPopupWindowWidget.widgetMode({Key? key, this.mainWindowAlignment = Alignment.center, this.borderRadius, this.child, this.contentPadding, this.centerTitle, this.defaultTextStyle, this.defaultTextAlign = TextAlign.center, this.duration = const Duration(milliseconds: 500), this.footer, this.mainWindowPadding, this.mainWindowMaxPadding, this.smallerMaxSize, this.biggerMaxSize, this.title, this.divider, this.supportedOrientation, this.titleTextStyle, this.windowElevation, this.overlapChildren = const [], this.useMaterial3, this.fontColor, this.childScrollController, this.intend = 1, this.animationCurve = Curves.easeInOut})
+  const OnPopupWindowWidget.widgetMode(
+      {Key? key,
+      this.mainWindowAlignment = Alignment.center,
+      this.borderRadius,
+      this.child,
+      this.contentPadding,
+      this.centerTitle,
+      this.defaultTextStyle,
+      this.defaultTextAlign = TextAlign.center,
+      this.duration = const Duration(milliseconds: 500),
+      this.footer,
+      this.mainWindowPadding,
+      this.mainWindowMaxPadding,
+      this.smallerMaxSize,
+      this.biggerMaxSize,
+      this.title,
+      this.divider,
+      this.supportedOrientation,
+      this.titleTextStyle,
+      this.windowElevation,
+      this.overlapChildren = const [],
+      this.useMaterial3,
+      this.fontColor,
+      this.childScrollController,
+      this.intend = 1,
+      this.animationCurve = Curves.easeInOut,
+      this.responsiveMinSize,
+      this.backgroundColor})
       : _fullScreenMode = false,
         super(key: key);
 
@@ -87,13 +141,18 @@ class OnPopupWindowWidget extends StatelessWidget {
   /// Animation curve
   final Curve animationCurve;
 
+  /// Min size for responsive behave
+  /// Default: smallerMaxSize / 1.5
+  final double? responsiveMinSize;
+
+  /// Window background color
+  /// Default: material3 ? theme.dialogTheme.backgroundColor : theme.canvasColor
+  final Color? backgroundColor;
+
   final bool _fullScreenMode;
 
-  Color inverseCanvasColor(Color color) {
-    return Color.fromRGBO(255 - color.red, 255 - color.green, 255 - color.blue, color.opacity);
-  }
-
-  double pad(ThemeData theme) => (contentPadding ?? theme.buttonTheme.height / 2);
+  Color inverseCanvasColor(Color color) => Color.fromRGBO(
+      255 - color.red, 255 - color.green, 255 - color.blue, color.opacity);
 
   @override
   Widget build(BuildContext context) {
@@ -107,25 +166,30 @@ class OnPopupWindowWidget extends StatelessWidget {
       removeBottom: true,
       context: context,
       child: Container(
-        margin: EdgeInsets.only(top: m.viewInsets.top, bottom: m.viewInsets.bottom, left: m.viewInsets.left, right: m.viewInsets.right),
-        child: Container(
-          // margin: EdgeInsets.all(pad(theme) * intend),
-          child: LayoutBuilder(
-            builder: (_, constraints) {
-              return buildWidget(context, constraints, theme);
-            },
-          ),
+        margin: EdgeInsets.only(
+            top: m.viewInsets.top,
+            bottom: m.viewInsets.bottom,
+            left: m.viewInsets.left,
+            right: m.viewInsets.right),
+        child: LayoutBuilder(
+          builder: (_, constraints) {
+            return buildWidget(context, constraints, theme);
+          },
         ),
       ),
     );
   }
 
-  Widget buildWidget(BuildContext context, BoxConstraints box, ThemeData theme) {
+  Widget buildWidget(
+      BuildContext context, BoxConstraints box, ThemeData theme) {
     Size m = Size(box.maxWidth, box.maxHeight);
-    double p = pad(theme);
+    // double p = pad(theme);
+    double p = contentPadding ?? theme.buttonTheme.height / 2;
 
     double bh = theme.buttonTheme.height;
-    bool landscape = supportedOrientation != null ? Orientation.landscape == supportedOrientation : MediaQuery.orientationOf(context) == Orientation.landscape;
+    bool landscape = supportedOrientation != null
+        ? Orientation.landscape == supportedOrientation
+        : MediaQuery.orientationOf(context) == Orientation.landscape;
     double maxS = biggerMaxSize ?? bh * 15;
     double minS = smallerMaxSize ?? (bh * 10);
 
@@ -135,7 +199,10 @@ class OnPopupWindowWidget extends StatelessWidget {
     // double p = (contentPadding ?? theme.buttonTheme.height / 2);
 
     bool material3 = useMaterial3 ?? theme.useMaterial3;
-    Color fc = fontColor ?? (material3 ? theme.colorScheme.onBackground : inverseCanvasColor(theme.canvasColor));
+    Color fc = fontColor ??
+        (material3
+            ? theme.colorScheme.onBackground
+            : inverseCanvasColor(theme.canvasColor));
 
     Widget size([i]) => SizedBox(height: p / (i ?? 2), width: p / (i ?? 2));
 
@@ -159,12 +226,18 @@ class OnPopupWindowWidget extends StatelessWidget {
 
       return Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: c ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+        crossAxisAlignment:
+            c ? CrossAxisAlignment.center : CrossAxisAlignment.start,
         children: [
           DefaultTextStyle(
             textAlign: c ? TextAlign.center : TextAlign.start,
-            style: titleTextStyle ?? theme.dialogTheme.titleTextStyle ?? theme.textTheme.titleMedium?.copyWith(color: fc, fontWeight: FontWeight.bold) ?? TextStyle(color: fontColor ?? theme.colorScheme.onBackground),
-            child: Padding(padding: EdgeInsets.symmetric(horizontal: p), child: title!),
+            style: titleTextStyle ??
+                theme.dialogTheme.titleTextStyle ??
+                theme.textTheme.titleMedium
+                    ?.copyWith(color: fc, fontWeight: FontWeight.bold) ??
+                TextStyle(color: fontColor ?? theme.colorScheme.onBackground),
+            child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: p), child: title!),
           ),
           size(),
           divider ?? const Divider(height: 0),
@@ -203,36 +276,63 @@ class OnPopupWindowWidget extends StatelessWidget {
       );
     }
 
-    double leftPadding() => (landscape ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4)) : p);
-    double rightPadding() => (landscape ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4)) : p);
-    double topPadding() => (!landscape ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4)) : p);
-    double bottomPadding() => (!landscape ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4)) : p);
+    double leftPadding() =>
+        (landscape ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4)) : p);
+    double rightPadding() =>
+        (landscape ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4)) : p);
+    double topPadding() =>
+        (!landscape ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4)) : p);
+    double bottomPadding() =>
+        (!landscape ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4)) : p);
+
+    bool isResponsive() {
+      double t = responsiveMinSize ?? minS / 1.5;
+      return m.width < t || m.height < t;
+    }
 
     Widget mainWidget() {
       return FittedBox(
         child: Container(
-          margin: EdgeInsets.all(pad(theme) * intend),
+          margin: EdgeInsets.all(p * intend),
           child: FittedBox(
-            fit: showPadding ? BoxFit.contain : BoxFit.none,
+            fit: isResponsive() ? BoxFit.contain : BoxFit.none,
             child: AnimatedContainer(
               curve: animationCurve,
               duration: duration,
-              constraints: BoxConstraints(maxHeight: maxHeight, maxWidth: maxWidth),
-              width: showPadding ? null : m.width - (leftPadding() + rightPadding()),
-              height: showPadding ? null : m.height - (topPadding() + bottomPadding()),
-              margin: mainWindowPadding ?? EdgeInsets.only(left: leftPadding(), right: rightPadding(), top: topPadding(), bottom: bottomPadding()),
+              constraints:
+                  BoxConstraints(maxHeight: maxHeight, maxWidth: maxWidth),
+              width: isResponsive()
+                  ? null
+                  : m.width - (leftPadding() + rightPadding()),
+              height: isResponsive()
+                  ? null
+                  : m.height - (topPadding() + bottomPadding()),
+              margin: mainWindowPadding ??
+                  EdgeInsets.only(
+                      left: leftPadding(),
+                      right: rightPadding(),
+                      top: topPadding(),
+                      bottom: bottomPadding()),
               child: Stack(
                 clipBehavior: Clip.none,
                 children: [
                   Material(
-                    elevation: windowElevation ?? theme.dialogTheme.elevation ?? theme.buttonTheme.height / 2,
+                    elevation: windowElevation ??
+                        theme.dialogTheme.elevation ??
+                        theme.buttonTheme.height / 2,
                     clipBehavior: Clip.antiAlias,
                     surfaceTintColor: Colors.transparent,
-                    color: theme.colorScheme.background,
-                    borderRadius: borderRadius ?? BorderRadius.circular(theme.buttonTheme.height / 2),
+                    // color: theme.colorScheme.background,
+                    color: Colors.transparent,
+                    borderRadius: borderRadius ??
+                        BorderRadius.circular(theme.buttonTheme.height / 2),
                     child: Container(
                       padding: EdgeInsets.symmetric(vertical: p),
-                      decoration: BoxDecoration(color: material3 ? theme.dialogTheme.backgroundColor ?? theme.colorScheme.primary.withOpacity(0.1) : theme.canvasColor),
+                      decoration: BoxDecoration(
+                          color: backgroundColor ??
+                              (material3
+                                  ? theme.dialogTheme.backgroundColor
+                                  : theme.canvasColor)),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -240,7 +340,13 @@ class OnPopupWindowWidget extends StatelessWidget {
                           Flexible(
                             child: DefaultTextStyle(
                               textAlign: defaultTextAlign,
-                              style: defaultTextStyle ?? theme.dialogTheme.contentTextStyle ?? theme.textTheme.titleSmall?.copyWith(color: fc) ?? TextStyle(color: fontColor ?? theme.colorScheme.onBackground),
+                              style: defaultTextStyle ??
+                                  theme.dialogTheme.contentTextStyle ??
+                                  theme.textTheme.titleSmall
+                                      ?.copyWith(color: fc) ??
+                                  TextStyle(
+                                      color: fontColor ??
+                                          theme.colorScheme.onBackground),
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
