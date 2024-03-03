@@ -27,3 +27,7 @@
 
 * Integrated responsive UI. 
 * animationCurve, responsiveMinSize, backgroundColor parameter is added. 
+
+## 0.0.8
+
+* Refactor color property. 

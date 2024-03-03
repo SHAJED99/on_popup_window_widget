@@ -331,7 +331,8 @@ class OnPopupWindowWidget extends StatelessWidget {
                       decoration: BoxDecoration(
                           color: backgroundColor ??
                               (material3
-                                  ? theme.dialogTheme.backgroundColor
+                                  ? theme.dialogTheme.backgroundColor ??
+                                      theme.colorScheme.background
                                   : theme.canvasColor)),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
