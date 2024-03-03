@@ -22,3 +22,8 @@
 ## 0.0.6
 
 * intend parameters is added. 
+
+## 0.0.7
+
+* Integrated responsive UI. 
+* animationCurve, responsiveMinSize, backgroundColor parameter is added. 
