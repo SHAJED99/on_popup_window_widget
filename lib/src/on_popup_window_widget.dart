@@ -28,7 +28,8 @@ class OnPopupWindowWidget extends StatelessWidget {
       this.intend = 1,
       this.animationCurve = Curves.easeInOut,
       this.responsiveMinSize,
-      this.backgroundColor})
+      this.backgroundColor,
+      this.noScrollingChild = false})
       : _fullScreenMode = true,
         super(key: key);
 
@@ -59,7 +60,8 @@ class OnPopupWindowWidget extends StatelessWidget {
       this.intend = 1,
       this.animationCurve = Curves.easeInOut,
       this.responsiveMinSize,
-      this.backgroundColor})
+      this.backgroundColor,
+      this.noScrollingChild = false})
       : _fullScreenMode = false,
         super(key: key);
 
@@ -148,6 +150,9 @@ class OnPopupWindowWidget extends StatelessWidget {
   /// Window background color
   /// Default: material3 ? theme.dialogTheme.backgroundColor : theme.canvasColor
   final Color? backgroundColor;
+
+  /// Child will not scroll. Do not use it if the child is bigger the half of screen size
+  final bool noScrollingChild;
 
   final bool _fullScreenMode;
 
@@ -249,20 +254,24 @@ class OnPopupWindowWidget extends StatelessWidget {
     Widget childChild() {
       if (child == null) return const SizedBox();
 
+      Widget res = AnimatedSize(
+        alignment: Alignment.topCenter,
+        curve: animationCurve,
+        duration: duration,
+        child: Container(
+          constraints: BoxConstraints(maxWidth: maxWidth),
+          margin: EdgeInsets.only(top: p / 4, bottom: p / 4),
+          padding: EdgeInsets.symmetric(horizontal: p),
+          child: child,
+        ),
+      );
+
+      if (noScrollingChild) return Flexible(child: res);
+
       return Flexible(
         child: SingleChildScrollView(
           controller: childScrollController,
-          child: AnimatedSize(
-            alignment: Alignment.topCenter,
-            curve: animationCurve,
-            duration: duration,
-            child: Container(
-              constraints: BoxConstraints(maxWidth: maxWidth),
-              margin: EdgeInsets.only(top: p / 4, bottom: p / 4),
-              padding: EdgeInsets.symmetric(horizontal: p),
-              child: child,
-            ),
-          ),
+          child: res,
         ),
       );
     }

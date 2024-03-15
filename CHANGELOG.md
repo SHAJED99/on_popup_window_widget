@@ -31,3 +31,11 @@
 ## 0.0.8
 
 * Refactor color property. 
+
+## 0.0.9
+
+* noScrollingChild parameter is added. 
+
+## 0.0.10
+
+* Refactor noScrollingChild property. 
