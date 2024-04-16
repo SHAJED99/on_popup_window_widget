@@ -39,3 +39,7 @@
 ## 0.0.10
 
 * Refactor noScrollingChild property. 
+
+## 0.0.11
+
+* Refactor OnPopupWindowWidget.widgetMode size problem. 

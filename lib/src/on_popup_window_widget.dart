@@ -302,7 +302,7 @@ class OnPopupWindowWidget extends StatelessWidget {
     Widget mainWidget() {
       return FittedBox(
         child: Container(
-          margin: EdgeInsets.all(p * intend),
+          margin: !_fullScreenMode ? null : EdgeInsets.all(p * intend),
           child: FittedBox(
             fit: isResponsive() ? BoxFit.contain : BoxFit.none,
             child: AnimatedContainer(
@@ -316,12 +316,14 @@ class OnPopupWindowWidget extends StatelessWidget {
               height: isResponsive()
                   ? null
                   : m.height - (topPadding() + bottomPadding()),
-              margin: mainWindowPadding ??
-                  EdgeInsets.only(
-                      left: leftPadding(),
-                      right: rightPadding(),
-                      top: topPadding(),
-                      bottom: bottomPadding()),
+              margin: !_fullScreenMode
+                  ? null
+                  : (mainWindowPadding ??
+                      EdgeInsets.only(
+                          left: leftPadding(),
+                          right: rightPadding(),
+                          top: topPadding(),
+                          bottom: bottomPadding())),
               child: Stack(
                 clipBehavior: Clip.none,
                 children: [
