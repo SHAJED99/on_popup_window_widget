@@ -78,6 +78,7 @@ class MainWidget extends StatelessWidget {
     return showDialog(
       context: context,
       builder: (context) => OnPopupWindowWidget(
+        biggerMaxSize: 1000,
         intend: intend,
         title: const Text("Please select your Language"),
         footer: Container(
@@ -132,10 +133,20 @@ class MainWidget extends StatelessWidget {
             onTap: () => showDialog(
               context: context,
               builder: (context) => OnPopupWindowWidget(
+                biggerMaxSize: 1000,
                 title: const Text("Please select your Language"),
                 footer: const OnProcessButtonWidget(
                     expanded: false, child: Text("Okay")),
-                child: Column(children: children(context)),
+                // child: Column(children: children(context)),
+                child: Column(
+                  children: [
+                    Container(
+                      height: 100,
+                      color: Colors.amber,
+                    ),
+                    TextFormField(),
+                  ],
+                ),
               ),
             ),
             child: const Text("Press here"),

@@ -306,6 +306,7 @@ class OnPopupWindowWidget extends StatelessWidget {
           child: FittedBox(
             fit: isResponsive() ? BoxFit.contain : BoxFit.none,
             child: AnimatedContainer(
+              alignment: Alignment.center,
               curve: animationCurve,
               duration: duration,
               constraints:

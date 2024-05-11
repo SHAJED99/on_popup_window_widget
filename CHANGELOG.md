@@ -43,3 +43,7 @@
 ## 0.0.11
 
 * Refactor OnPopupWindowWidget.widgetMode size problem. 
+
+## 0.0.12
+
+* Refactor Main window alignment problem.
