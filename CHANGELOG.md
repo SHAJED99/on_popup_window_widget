@@ -47,3 +47,7 @@
 ## 0.0.12
 
 * Refactor Main window alignment problem.
+
+## 0.0.13
+
+* Refactor Background Color.

@@ -88,7 +88,7 @@ class OnPopupWindowWidget extends StatelessWidget {
   final TextAlign defaultTextAlign;
 
   /// Child and footer text style
-  /// Default: theme.dialogTheme.contentTextStyle ?? theme.textTheme.titleSmall?.copyWith(color: theme.colorScheme.onBackground) ?? const TextStyle(),
+  /// Default: theme.dialogTheme.contentTextStyle ?? theme.textTheme.titleSmall?.copyWith(color: theme.colorScheme.onSurface) ?? const TextStyle(),
   final TextStyle? defaultTextStyle;
 
   /// Default: Divider(height: 0)
@@ -130,7 +130,7 @@ class OnPopupWindowWidget extends StatelessWidget {
   /// Popup window title
   final Widget? title;
 
-  /// Default: theme.dialogTheme.titleTextStyle ?? theme.textTheme.titleMedium?.copyWith(color: theme.colorScheme.onBackground, fontWeight: FontWeight.bold) ?? const TextStyle()
+  /// Default: theme.dialogTheme.titleTextStyle ?? theme.textTheme.titleMedium?.copyWith(color: theme.colorScheme.onSurface, fontWeight: FontWeight.bold) ?? const TextStyle()
   final TextStyle? titleTextStyle;
 
   /// User Material 3 theme
@@ -206,7 +206,7 @@ class OnPopupWindowWidget extends StatelessWidget {
     bool material3 = useMaterial3 ?? theme.useMaterial3;
     Color fc = fontColor ??
         (material3
-            ? theme.colorScheme.onBackground
+            ? theme.colorScheme.onSurface
             : inverseCanvasColor(theme.canvasColor));
 
     Widget size([i]) => SizedBox(height: p / (i ?? 2), width: p / (i ?? 2));
@@ -240,7 +240,7 @@ class OnPopupWindowWidget extends StatelessWidget {
                 theme.dialogTheme.titleTextStyle ??
                 theme.textTheme.titleMedium
                     ?.copyWith(color: fc, fontWeight: FontWeight.bold) ??
-                TextStyle(color: fontColor ?? theme.colorScheme.onBackground),
+                TextStyle(color: fontColor ?? theme.colorScheme.onSurface),
             child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: p), child: title!),
           ),
@@ -344,7 +344,7 @@ class OnPopupWindowWidget extends StatelessWidget {
                           color: backgroundColor ??
                               (material3
                                   ? theme.dialogTheme.backgroundColor ??
-                                      theme.colorScheme.background
+                                      theme.colorScheme.surface
                                   : theme.canvasColor)),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -359,7 +359,7 @@ class OnPopupWindowWidget extends StatelessWidget {
                                       ?.copyWith(color: fc) ??
                                   TextStyle(
                                       color: fontColor ??
-                                          theme.colorScheme.onBackground),
+                                          theme.colorScheme.onSurface),
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
