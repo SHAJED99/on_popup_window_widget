@@ -1,6 +1,6 @@
 name: on_popup_window_widget
-description: "An awesome popup widget that fulfills all your demands in dialog. Supports material 3" 
-version: 0.0.13
+description: 'An awesome popup widget that fulfills all your demands in dialog. Supports material 3'
+version: 0.0.14
 homepage: https://github.com/SHAJED99/on_popup_window_widget
 license: BSD 3-Clause
 
@@ -16,7 +16,7 @@ topics:
 
 environment:
   sdk: '>=2.12.0 <4.0.0'
-  flutter: ">=1.17.0"
+  flutter: '>=1.17.0'
 
 dependencies:
   flutter:

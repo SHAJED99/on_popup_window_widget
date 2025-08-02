@@ -295,6 +295,7 @@ class OnPopupWindowWidget extends StatelessWidget {
         (!landscape ? (showPadding ? p : (mainWindowMaxPadding ?? p * 4)) : p);
 
     bool isResponsive() {
+      if (!_fullScreenMode) return true;
       double t = responsiveMinSize ?? minS / 1.5;
       return m.width < t || m.height < t;
     }
@@ -306,7 +307,7 @@ class OnPopupWindowWidget extends StatelessWidget {
           child: FittedBox(
             fit: isResponsive() ? BoxFit.contain : BoxFit.none,
             child: AnimatedContainer(
-              alignment: Alignment.center,
+              alignment: !_fullScreenMode ? null : Alignment.center,
               curve: animationCurve,
               duration: duration,
               constraints:

@@ -30,9 +30,10 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeMode.light,
       // themeMode: ThemeMode.dark,
       home: Scaffold(
+        backgroundColor: Colors.amber,
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 24),
+            padding: const EdgeInsets.symmetric(vertical: 0),
             child: Center(
               child: MainWidget(),
             ),
@@ -193,21 +194,55 @@ class MainWidget extends StatelessWidget {
             ),
             child: const Text("Overlay Widget"),
           ),
-          OnPopupWindowWidget.widgetMode(
-            title: const Text("Please select your Language"),
-            footer: const OnProcessButtonWidget(
-                expanded: false, child: Text("Okay")),
-            overlapChildren: const [
-              Positioned(
-                right: -10,
-                top: -10,
-                child: OnProcessButtonWidget(
-                  contentPadding: EdgeInsets.zero,
-                  child: Icon(Icons.cancel, color: Colors.white),
-                ),
-              ),
-            ],
-            child: Column(children: children(context)),
+          // OnPopupWindowWidget.widgetMode(
+          //   title: const Text("Please select your Language"),
+          //   footer: const OnProcessButtonWidget(
+          //       expanded: false, child: Text("Okay")),
+          //   overlapChildren: const [
+          //     Positioned(
+          //       right: -10,
+          //       top: -10,
+          //       child: OnProcessButtonWidget(
+          //         contentPadding: EdgeInsets.zero,
+          //         child: Icon(Icons.cancel, color: Colors.white),
+          //       ),
+          //     ),
+          //   ],
+          //   child: Column(children: children(context)),
+          // ),
+
+          OnProcessButtonWidget(
+            onTap: () {
+              showBottomSheet(
+                context: context,
+                // backgroundColor: Colors.transparent,
+                enableDrag: true,
+                showDragHandle: true,
+                builder: (context) {
+                  return OnPopupWindowWidget.widgetMode(
+                    windowElevation: 0,
+                    backgroundColor: Colors.transparent,
+                    intend: 0,
+                    title: const Text("Please select your Language"),
+                    footer: const OnProcessButtonWidget(
+                        expanded: false, child: Text("Okay")),
+                    // overlapChildren: const [
+                    //   Positioned(
+                    //     right: -10,
+                    //     top: -10,
+                    //     child: OnProcessButtonWidget(
+                    //       contentPadding: EdgeInsets.zero,
+                    //       child: Icon(Icons.cancel, color: Colors.white),
+                    //     ),
+                    //   ),
+                    // ],
+                    child: Column(children: children(context)),
+                  );
+                },
+              );
+              return null;
+            },
+            child: const Text('BottomSheet'),
           )
         ],
       ),
