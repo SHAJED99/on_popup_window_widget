@@ -1,3 +1,8 @@
+[![Pub Version](https://img.shields.io/pub/v/on_popup_window_widget?style=flat-square)](https://pub.dev/packages/on_popup_window_widget)
+[![Flutter](https://img.shields.io/badge/Flutter-3.x-blue?style=flat-square)](https://flutter.dev)
+[![Dart](https://img.shields.io/badge/Dart-3.x-blue?style=flat-square)](https://dart.dev)
+[![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
+
 
 # On Popup Window Widget
 
